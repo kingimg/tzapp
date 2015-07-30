@@ -1,0 +1,19 @@
+﻿<ion-view title="登录">
+    <ion-content padding="true" class="has-header" has-bouncing="true">
+        <form>
+            <ion-list>
+                <label class="item item-input">
+                    <span class="input-label">用户名</span>   
+                    <input type="text"  ng-model="user.username" placeholder="">                    
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">密码</span>
+                    <input type="password" ng-model="user.password" placeholder="">
+                </label>
+            </ion-list>
+            <div class="spacer" style="height: 40px;"></div>
+            <button class="button button-positive button-block "  ng-click="login(user)">立即登录</button>
+            <a href="#/forgot-password" class="button button-positive button-clear button-block ">找回密码</a>
+        </form>
+    </ion-content>
+</ion-view>

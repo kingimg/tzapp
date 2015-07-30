@@ -1,0 +1,40 @@
+﻿<ion-view view-title="检查详情">
+  <ion-content class="padding">
+      <div class="list">
+          <div class="item">
+              工程名称
+              <span class="item-note">{{checkdetail.ProName}}</span>
+          </div>
+          <label class="item item-input item-select">
+              <div class="input-label">
+                  检查类型
+              </div>
+              <select ng-selected="checkdetail.CheckType">
+                  <option value="6" selected>安全检查</option>
+                  <option value="1">质量检查</option>
+              </select>
+          </label>
+          <label class="item item-input">
+              <div class="input-label">
+                  检查时间
+              </div>
+              <input type="date" name="CheckTime" ng-model="checkdetail.CheckTime" />
+          </label>   
+          <label class="item item-input">
+              <div class="input-label">
+                  监督员
+              </div>
+              <input type="text" name="checkuser" ng-model="checkdetail.CheckUser">
+          </label>  
+          <label class="item item-input">              
+              <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.Content1"></textarea>
+          </label>
+          <div class="item">
+              <div class="imgitem" ng-repeat="photo in photos"><img ng-src="{{photo.PicPath_s}}" /></div>
+              <div class="imgitem"><i class="ion-ios-camera plussize" ng-click="showActionsheet()"></i></div> 
+          </div>
+          <br/>
+          <button class="button button-positive button-block" ng-click="savecheck()">保存</button>         
+    </div>
+  </ion-content>
+</ion-view>

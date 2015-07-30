@@ -1,0 +1,174 @@
+/* Empty. Add your own CSS if you like */
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot?-qtlm92');
+	src:url('fonts/icomoon.eot?#iefix-qtlm92') format('embedded-opentype'),
+		url('fonts/icomoon.ttf?-qtlm92') format('truetype'),
+		url('fonts/icomoon.woff?-qtlm92') format('woff'),
+		url('fonts/icomoon.svg?-qtlm92#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+.icon-buildings25:before,.icon-construction15:before,.icon-crane30:before,.icon-cranes2:before,.icon-elevator3:before
+,.icon-elevator4:before,.icon-elevator5:before,.icon-elevator10:before,.icon-elevator11:before
+,.icon-elevator12:before,.icon-hotel71:before,.icon-lift:before,.icon-lift1:before
+,.icon-man334:before,.icon-public8:before,.icon-signal77:before,.icon-tower11:before,.icon-worker38:before
+,.icon-construction14:before,.icon-construction17:before,.icon-crane19:before,.icon-excavator3:before,.icon-machine5:before
+{
+ display: inline-block;
+  font-family: "icomoon";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-buildings25:before {
+	content: "\e600";
+}
+.icon-construction15:before {
+	content: "\e601";
+}
+.icon-crane30:before {
+	content: "\e602";
+}
+.icon-cranes2:before {
+	content: "\e603";
+}
+.icon-elevator3:before {
+	content: "\e604";
+}
+.icon-elevator4:before {
+	content: "\e605";
+}
+.icon-elevator5:before {
+	content: "\e606";
+}
+.icon-elevator10:before {
+	content: "\e607";
+}
+.icon-elevator11:before {
+	content: "\e608";
+}
+.icon-elevator12:before {
+	content: "\e609";
+}
+.icon-hotel71:before {
+	content: "\e60a";
+}
+.icon-lift:before {
+	content: "\e60b";
+}
+.icon-lift1:before {
+	content: "\e60c";
+}
+.icon-man334:before {
+	content: "\e60d";
+}
+.icon-public8:before {
+	content: "\e60e";
+}
+.icon-signal77:before {
+	content: "\e60f";
+}
+.icon-tower11:before {
+	content: "\e610";
+}
+.icon-worker38:before {
+	content: "\e611";
+}
+.icon-construction14:before {
+	content: "\e612";
+}
+.icon-construction17:before {
+	content: "\e613";
+}
+.icon-crane19:before {
+	content: "\e614";
+}
+.icon-excavator3:before {
+	content: "\e615";
+}
+.icon-machine5:before {
+	content: "\e616";
+}
+
+.fixwidth {
+    max-width:180px;overflow: hidden;white-space: nowrap; -o-text-overflow: ellipsis; text-overflow: ellipsis;
+}
+
+.badge-jk {text-decoration:none; }
+
+.prolist .protop {color:#603811;}
+.prolist .protop span.item-note {color:#ed8412;} 
+.prolist h2 { padding:0px;margin:0px; 
+height:20px;line-height:20px;overflow: hidden;white-space: nowrap; -o-text-overflow: ellipsis; text-overflow: ellipsis;
+}
+.prolist h2 a {font-size:20px; text-decoration:none; color:black;font-weight:bold; }
+.prolist .prodes { color:gray; font-size:12px; margin-top:5px;}
+.prolist .pronum { color:#009899;}
+.prolist .pronum span.item-note {color:red;} 
+
+
+ion-tabs.tabs-color-active-positive .tab-item.tab-item-active, ion-tabs.tabs-color-active-positive .tab-item.active, ion-tabs.tabs-color-active-positive .tab-item.activated {
+    color: #387ef5 !important;border-top: 2px solid #387ef5 !important; }
+
+.icon-large { font-size:40px;}
+.icon-small { font-size:25px;}
+.font-small { font-size:12px;} 
+.font-smaller { font-size:10px;} 
+.minisize { font-size:8px;}
+.online { color:green;}
+.offline {color:gray;}
+
+.imgitem {
+    float:left;
+    width:70px;
+    height:70px;
+    margin:3px;
+    border:1px solid #d9d7e2;
+    text-align:center;
+}
+.imgitem img { width:100%;height:100%;}
+.imgitem .plussize{
+    font-size:70px;
+    color:#d9d7e2;
+}
+
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.02s all linear; 
+}
+.list .item.item-accordion:last-child {border-radius:  0px 0px 4px 4px;}
+.list .item.item-accordion.ng-hide {
+  line-height: 0px;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
+}
+ 
+.list .item.item-accordion .accordionitem { padding-top: 0; padding-bottom: 0; border-top:1px dashed #ddd;} 
+.list .item.item-accordion .accordionitem:first-child { border-top-width:0px; } 
+
+.list .item.roundedtop {
+     border-radius: 4px 4px 0px 0px;
+}
+.list .item.roundedbottom {
+     border-radius:  0px 0px 4px 4px;
+}
+.item-box {
+    margin-bottom:5px;
+}
+
+  .item.item-btitle {
+    border-color: #0a9ec7;
+    background-color: #ddd;
+    color: #2982a8; }
