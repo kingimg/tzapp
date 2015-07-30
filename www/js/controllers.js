@@ -18,9 +18,8 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
     };  
 }])
 
-.constant('ApiEndpoint', {
-    url: 'http://tzapp.safe110.net:8085'  
-//url: 'http://192.168.1.214:8085'  
+.constant('ApiEndpoint', {   
+   url: 'http://192.168.1.223:8085'  
 })
 
 
@@ -196,7 +195,7 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
     $scope.page_count = 1;
     $scope.load_over = true;
     $scope.loadMore = function () {
-        $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=' + $scope.page + '&proid=' + $stateParams.proId + '&r=' + Math.random()).success(function (data) {
+        $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=' + $scope.page + '&proid=' + $stateParams.proId + '&checkType=0,1,6&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 $scope.page_count = data.total;
                 $scope.checks = $scope.checks.concat(data.rows);
@@ -269,8 +268,7 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
             })
         }
     };
-    function onPhotoDone(imageURI) {       
-        //$scope.photos.push(photo);
+    function onPhotoDone(imageURI) { 
         uploadPhoto(imageURI);
     }
     function onPhotoFail(message) {       
@@ -281,10 +279,11 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
     function uploadPhoto(imageURI) {        
         var done = function (r) {
             var reg = eval('(' + r.response + ')');
-            var photo = { PicPath:reg.obj,PicPath_s: imageURI };
-            var temparr = [];
-            temparr.push(photo);
-            $scope.photos = $scope.photos.concat(temparr);
+            var photo = { PicPath: reg.obj, PicPath_s: imageURI };
+            alert(photo.PicPath);
+            $scope.$apply(function () {
+                $scope.photos.push(photo);
+            });
             //ybb_user.profile.avatar = json.avatar_src;         
         };
 
@@ -294,7 +293,7 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
 
         var options = new FileUploadOptions();
         options.fileKey = "fileAddPic";
-        options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+        options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1).split("?")[0];
         //如果是图片格式，就用image/jpeg，其他文件格式上官网查API
         options.mimeType = "image/jpeg";          
         options.chunkedMode = false;
@@ -341,18 +340,74 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
     };
 })
 
-.controller('ctrl-board-projectdetail', function ($scope, $stateParams, BoardProjects) {
+.controller('ctrl-board-projectdetail', function ($scope, $stateParams, $http, ApiEndpoint) {
+    $scope.projectDetail = {};
+    $scope.checks = [];
+    $scope.persons = [];
+    $scope.devices = [];
+    $scope.IsLoadForMonitor = true;
+    $scope.IsLoadForCheck = true;
+    $scope.IsLoadForPerson = true;
     $scope.shownGroup = 1;
-    $scope.toggleGroup = function (index) {
+    $scope.toggleGroup = function (index) {        
         if ($scope.isGroupShown(index)) {
             $scope.shownGroup = null;
-        } else {
+        } else {           
             $scope.shownGroup = index;
+            if ($scope.IsLoadForMonitor && index == 3) {
+                $http.post(ApiEndpoint.url + '/monitor/getRegisterList/?r=' + Math.random()).success(function (data) {
+                    if (data.success) {
+                        $scope.devices = $scope.devices.concat(data.rows);
+                        $scope.IsLoadForMonitor = false;
+                    }
+                })
+            } else if ($scope.IsLoadForCheck && index == 5) {
+                $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=1&rows=10000&proid=' + $stateParams.proId + '&checkType=2&r=' + Math.random()).success(function (data) {
+                    if (data.success) {
+                        $scope.checks = $scope.checks.concat(data.rows);
+                        $scope.IsLoadForCheck = false;                        
+                    }
+                })
+            } else if ($scope.IsLoadForPerson && index == 6) {
+                $http.post(ApiEndpoint.url + '/zaSys/getProPerList/?proid=' + $stateParams.proId + '&r=' + Math.random()).success(function (data) {
+                    if (data.success) {
+                        $scope.persons = $scope.persons.concat(data.rows);
+                        $scope.IsLoadForPerson = false;
+                    }
+                })
+            }
         }
     };
     $scope.isGroupShown = function (index) {
-        return $scope.shownGroup === index;
-    };
+        return $scope.shownGroup === index;       
+    };    
+    $http.post(ApiEndpoint.url + '/zaSys/getProjectDetail?proId=' + $stateParams.proId + '&r=' + Math.random()).success(function (data) {
+        if (data.success) {
+            $scope.projectDetail.RegNumber = data.obj[0].RegNumber;
+            $scope.projectDetail.ShigongUnitName = data.obj[0].ShigongUnitName;
+            $scope.projectDetail.ConsUnitName = data.obj[0].ConsUnitName;
+            $scope.projectDetail.ProUsers = data.obj[0].ProUsers;
+            $scope.projectDetail.JiaoDiDate = data.obj[0].JiaoDiDate;
+            $scope.projectDetail.CheckCount = data.obj[0].CheckCount;
+            $scope.projectDetail.CheckCount1 = data.obj[0].CheckCount1;
+            $scope.projectDetail.noticeNum = data.obj[0].noticeNum;
+            $scope.projectDetail.closeNum = data.obj[0].closeNum;
+            $scope.projectDetail.LastCheckTime = data.obj[0].LastCheckTime;
+            $scope.projectDetail.Target1 = data.obj[0].Target1;
+            $scope.projectDetail.Count1 = data.obj[0].Count1;
+            $scope.projectDetail.Target2 = data.obj[0].Target2;
+            $scope.projectDetail.Count2 = data.obj[0].Count2;
+            $scope.projectDetail.Target3 = data.obj[0].Target3;
+            $scope.projectDetail.Count3 = data.obj[0].Count3;
+            $scope.projectDetail.Target4 = data.obj[0].Target4;
+            $scope.projectDetail.Count4 = data.obj[0].Count4;
+            $scope.projectDetail.CountTotal = data.obj[0].Count1 + data.obj[0].Count2 + data.obj[0].Count3 + data.obj[0].Count4;
+            $scope.projectDetail.TargetTotal = data.obj[0].Target1 + data.obj[0].Target2 + data.obj[0].Target3 + data.obj[0].Target4;
+        } else {
+            alert(data.msg);
+            $state.go('login');
+        }
+    });
 })
 
 .controller('ctrl-account-main', function ($scope, $state, $http, ApiEndpoint) {

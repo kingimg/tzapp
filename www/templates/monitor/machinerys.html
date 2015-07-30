@@ -8,7 +8,7 @@
         <div class="list">            
             <a class="item item-avatar" href="#/menus/monitor/machinerydetail/{{machine.BaID}}" ng-repeat="machine in machinerys">
                 <div class="item-image">
-                    <i class="icon {{machine.MachineType | machineIconTran}}  icon-large positive"></i>
+                    <i class="icon {{machine.MachineType | machineIconTran:1}}  icon-large positive"></i>
                     <div  class="font-smaller">{{machine.MachineryName}}</div>
                 </div>
                 <h2>{{machine.BeiAnICP}}</h2> 

@@ -44,12 +44,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
     })
 .filter('machineIconTran', function () {
-    return function (val) {
-        switch (val) {
-            case 1: return "icon-construction15"; break;
-            case 2: return "icon-elevator3"; break;
-            case 3: return "icon-crane30"; break;
-            case 4: return "icon-excavator3"; break;
+    return function (val, action) {
+        if (action == 1) {
+            switch (val) {
+                case 1: return "icon-construction15"; break;
+                case 2: return "icon-elevator3"; break;
+                case 3: return "icon-crane30"; break;
+                case 4: return "icon-excavator3"; break;
+            }
+        } else if (action == 2) {
+            switch (val) {
+                case 0: return "icon-construction15"; break;               
+                case 1: return "icon-elevator3"; break;
+            }
         }
     }
 })

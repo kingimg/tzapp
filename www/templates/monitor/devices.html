@@ -3,8 +3,10 @@
         <div class="list">            
             <a class="item item-avatar" href="#/menus/monitor/device/1" ng-repeat="device in devices">
                 <div class="item-image">
-                    <i class="icon icon-construction15 icon-large online"></i>
-                    <div class="font-small">在线</div>
+                    <i ng-if="device.IsOnline==1" class="icon {{device.MonitorType | machineIconTran:2}} icon-large online"></i>
+                    <div ng-if="device.IsOnline==1" class="font-small">在线</div>
+                    <i ng-if="device.IsOnline==0" class="icon {{device.MonitorType | machineIconTran:2}} icon-large offline"></i>
+                    <div ng-if="device.IsOnline==0" class="font-small">离线</div>
                 </div>
                 <h2>备案编号：{{device.FilingNO}}</h2> 
                 <p>
