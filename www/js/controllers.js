@@ -19,20 +19,29 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
 }])
 
 .constant('ApiEndpoint', {   
-    //url: 'http://192.168.1.223:8085'  
-    url: 'http://tzapp.safe110.net:8085'
+    url: 'http://192.168.1.223:8085'  
+    //url: 'http://tzapp.safe110.net:8085'
 })
 
 
-.controller('ctrl-login', function ($scope, $http, $state, $ionicHistory, ApiEndpoint) {
+.controller('ctrl-login', function ($scope, $ionicPopup, $http, $state, $ionicHistory, ApiEndpoint) {
     $ionicHistory.nextViewOptions({ disableBack: true });
-    $scope.dologin = function () {
-        if (window.localStorage["apikey"] != undefined) {
-            //$state.go('menus.home');
-            $state.go('menus.monitor-main');
-        }
+    //$scope.dologin = function () {
+    //    if (window.localStorage["apikey"] != undefined) {
+    //        //$state.go('menus.home');
+    //        $state.go('menus.monitor-main');
+    //    }
+    //};
+    $scope.showAlert = function () {
+        var alertPopup = $ionicPopup.alert({
+            title: '密码失效或不正确!',
+            template: '密码失效或不正确!'
+        });
+        alertPopup.then(function (res) {
+            console.log('Thank you for not eating my delicious ice cream cone');
+        });
     };
-    $scope.login = function (user) {
+    $scope.login = function (user) {        
         $http.get(ApiEndpoint.url + '/user/login/?loginName=' + user.username + '&passWord=' + user.password + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 window.localStorage['apikey'] = data.obj;
@@ -40,7 +49,7 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
                 //$state.go('menus.home');
                 $state.go('menus.monitor-main');
             } else {
-                alert(data.msg);
+                $scope.showAlert();
             }
         }).error(function (response) {
             if (errCb && typeof errCb === 'function') {
@@ -48,7 +57,7 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
             }
         });
     };
-    $scope.dologin();
+    //$scope.dologin();
 })
 .controller('ctrl-home', function ($scope) {
 
@@ -97,10 +106,29 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
         }
     });
 })
-    .controller('ctrl-monitor-devicedetail', function ($scope) {
-
+    .controller('ctrl-monitor-devicedetail', function ($scope, $stateParams, $http, $state, ApiEndpoint) {
+        $scope.devicedetail = {};
+        $http.post(ApiEndpoint.url + '/monitor/GetDeviceDetailInfo?deviceSN=' + $stateParams.deviceSN + '&monitorType=' + $stateParams.monitorType + '&r=' + Math.random()).success(function (data) {
+            if (data.success) {
+                $scope.devicedetail.FilingNO = data.obj.FilingNO;
+                $scope.devicedetail.DeviceNO = data.obj.DeviceNO;
+                $scope.devicedetail.OwnerCompanyName = data.obj.OwnerCompanyName;
+                $scope.devicedetail.OwnerCompanyID = data.obj.OwnerCompanyID;
+                $scope.devicedetail.ProjectName = data.obj.ProjectName;
+                $scope.devicedetail.ProjectID = data.obj.ProjectID;
+                $scope.devicedetail.ContractorCompanyName = data.obj.ContractorCompanyName;
+                $scope.devicedetail.AlarmCount = data.obj.AlarmCount;
+                $scope.devicedetail.OperateAlarmCount = data.obj.OperateAlarmCount;
+                $scope.devicedetail.UnoperateAlarmCount = data.obj.UnoperateAlarmCount;
+            } else {
+                alert(data.msg);               
+            }
+        });
     })
     .controller('ctrl-monitor-devicedetail-info', function ($scope) {
+
+    })
+    .controller('ctrl-monitor-devicedetail-simulate', function ($scope) {
 
     })
     //.controller('ctrl-monitor-elevators', function ($scope) {
@@ -195,11 +223,13 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
     $scope.page = 1;
     $scope.page_count = 1;
     $scope.load_over = true;
+    var proName,checkUser;
     $scope.loadMore = function () {
         $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=' + $scope.page + '&proid=' + $stateParams.proId + '&checkType=0,1,6&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 $scope.page_count = data.total;
                 $scope.checks = $scope.checks.concat(data.rows);
+                if (data.rows.length>0) { proName = data.rows[0].ProName; checkUser = data.rows[0].CheckUser; }
                 $scope.page++;
                 $scope.$broadcast("scroll.infiniteScrollComplete");
                 if ($scope.page > $scope.page_count) {
@@ -217,27 +247,31 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
         $scope.$broadcast('scroll.refreshComplete');
     };
     $scope.addnew = function () {
-        $state.go("menus.check-checkadd", { operType:'add', proId: $stateParams.proId });
+        $state.go("menus.check-checkadd", { operType: 'add', proId: $stateParams.proId, proName: proName, checkUser: checkUser });
     };
 })
-.controller('ctrl-check-checkdetail', function ($scope, $stateParams, $http ,$ionicActionSheet, ApiEndpoint) {
+.controller('ctrl-check-checkdetail', function ($scope, $stateParams, $window, $http ,$ionicActionSheet, ApiEndpoint) {
     $scope.checkdetail = {};
     $scope.photos = [];
     if ($stateParams.operType=='edit'){        
         $http.post(ApiEndpoint.url + '/zaSys/checkDetail/?checkId=' + $stateParams.checkId + '&r=' + Math.random()).success(function (data) {
             if (data.success) {               
                 $scope.checkdetail.ProName = data.rows[0].ProName;
-                $scope.checkdetail.CheckTypeName = data.rows[0].CheckTypeName;
-                $scope.checkdetail.CheckTime = data.rows[0].CheckTime;
+                $scope.checkdetail.CheckType = data.rows[0].CheckType;
+                $scope.checkdetail.CheckTime = data.rows[0].CheckTime;                
                 $scope.checkdetail.CheckUser = data.rows[0].CheckUser;
                 $scope.checkdetail.Content1 = data.rows[0].Content1;
-                $scope.photos = $scope.photos.concat(data.obj);
+                $scope.checkdetail.WebApiUrl = ApiEndpoint.url;
+                if (data.obj) { $scope.photos = $scope.photos.concat(data.obj); }                 
             } else {
                 alert('登录超时，请重新登录');
                 $scope.login();
                 return;
             }
         })
+    } else if ($stateParams.operType == 'add') {
+        $scope.checkdetail.ProName = $stateParams.proName;
+        $scope.checkdetail.CheckUser = $stateParams.checkUser;
     }
     
     $scope.showActionsheet = function () {
@@ -256,11 +290,28 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
             }
         });                    
     };
+    $scope.showPic = function (url) {
+        $window.open(url, '_blank', "width=100%,height=100%,resizable=1", '')
+    };
     $scope.savecheck = function () {
-        if ($stateParams.operType == 'edit'){
-            $http.post(ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkTypeName=' + $scope.checkdetail.CheckTypeName + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&r=' + Math.random()).success(function (data) {
+        if ($stateParams.operType == 'edit') {
+            var pics = getPicArr();
+            $http.post(ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
-                    
+                    alert("修改成功！");
+                } else {
+                    alert('登录超时，请重新登录');
+                    $scope.login();
+                    return;
+                }
+            })
+        } else if ($stateParams.operType == 'add') {
+            var pics = getPicArr();            
+            var now = new Date(Date.parse($scope.checkdetail.CheckTime));
+            var year = now.getFullYear(); var month = now.getMonth() + 1; var date = now.getDate();
+            $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + year + "-" + month + "-" + date + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
+                if (data.success) {
+                    alert("保存成功！");
                 } else {
                     alert('登录超时，请重新登录');
                     $scope.login();
@@ -277,15 +328,20 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
             alert('出錯了：' + message);
         }
     }
+    function getPicArr() {
+        var str = '';
+        for (var i in $scope.photos) {           
+            str += $scope.photos[i].PicPath+',';
+        }
+        return str.substr(0, str.lastIndexOf(','));
+    }
     function uploadPhoto(imageURI) {        
         var done = function (r) {
             var reg = eval('(' + r.response + ')');
-            var photo = { PicPath: reg.obj, PicPath_s: imageURI };
-            alert(photo.PicPath);
+            var photo = { PicPath: reg.obj , PicPath_s: imageURI };
             $scope.$apply(function () {
                 $scope.photos.push(photo);
-            });
-            //ybb_user.profile.avatar = json.avatar_src;         
+            });      
         };
 
         var fail = function (e) {
@@ -411,18 +467,29 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
     });
 })
 
-.controller('ctrl-account-main', function ($scope, $state, $http, ApiEndpoint) {
+.controller('ctrl-account-main', function ($scope, $ionicPopup, $state, $http, ApiEndpoint) {
+    $scope.showAlert = function () {
+        var alertPopup = $ionicPopup.alert({
+            title: '密码失效或不正确!',
+            template: '密码失效或不正确'
+        });
+        alertPopup.then(function (res) {
+            console.log('Thank you for not eating my delicious ice cream cone');
+        });
+    };
+
     $scope.exit = function () {
         $http.get(ApiEndpoint.url + '/user/exit/?r=' + Math.random()).success(function (data) {
             if (data.success) {
                 window.localStorage.removeItem('apikey'); $http.defaults.headers.common['apikey'] = "";
                 $state.go('login');
             } else {
-                alert(data.msg);
+                $scope.showAlert();
+                //alert(data.msg);
             }
         }).error(function (response) {
             if (errCb && typeof errCb === 'function') {
-                errCb(response);
+                //errCb(response);
             }
         });
     };

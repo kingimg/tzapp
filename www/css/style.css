@@ -99,7 +99,7 @@
 }
 
 .fixwidth {
-    max-width:180px;overflow: hidden;white-space: nowrap; -o-text-overflow: ellipsis; text-overflow: ellipsis;
+    max-width:160px;overflow: hidden;white-space: nowrap; -o-text-overflow: ellipsis; text-overflow: ellipsis;
 }
 
 .badge-jk {text-decoration:none; }
@@ -126,13 +126,26 @@ ion-tabs.tabs-color-active-positive .tab-item.tab-item-active, ion-tabs.tabs-col
 .online { color:green;}
 .offline {color:gray;}
 
-.imgitem {
+/*.imgitem {
     float:left;
     width:70px;
     height:70px;
     margin:3px;
     border:1px solid #d9d7e2;
     text-align:center;
+}*/
+.imgitem {
+    float:left;
+    width:24%;
+    height:70px;
+    /*margin:0px;*/
+    margin-right:1%;
+    margin-top:3px;
+    /*border:1px solid #d9d7e2;*/
+    text-align:center;
+}
+.imgitem-border {
+    border:1px solid #d9d7e2;
 }
 .imgitem img { width:100%;height:100%;}
 .imgitem .plussize{

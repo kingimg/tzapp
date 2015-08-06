@@ -1,7 +1,7 @@
 ﻿<ion-view view-title="监控塔吊列表">
     <ion-content padding="false" has-bouncing="true">
         <div class="list">            
-            <a class="item item-avatar" href="#/menus/monitor/device/1" ng-repeat="device in devices">
+            <a class="item item-avatar" ng-repeat="device in devices" href="#/menus/monitor/device/{{device.DeviceSN}}/{{device.MonitorType}}" >
                 <div class="item-image">
                     <i ng-if="device.IsOnline==1" class="icon {{device.MonitorType | machineIconTran:2}} icon-large online"></i>
                     <div ng-if="device.IsOnline==1" class="font-small">在线</div>

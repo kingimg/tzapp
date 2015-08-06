@@ -74,13 +74,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     //}
     $stateProvider
     .state('menus', { url: "/menus", abstract: true, templateUrl: "templates/menus.html" })
-    .state('login', { url: "/login", templateUrl: "templates/login.html", controller: 'ctrl-login' })
+    .state('login', { url: "/login", templateUrl: "templates/login.html", controller: 'ctrl-login' })   
     .state('menus.home', { views: { 'menus-home': { templateUrl: 'templates/home.html', controller: 'ctrl-home' } }, url: '/home' })
 
-    .state('menus.monitor-main', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/main.html', controller: 'ctrl-monitor-main' } }, url: '/monitor/main' })
+    .state('menus.monitor-main', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/main.html', controller: 'ctrl-monitor-main' } },url: '/monitor/main' })
     .state('menus.monitor-device', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/devices.html', controller: 'ctrl-monitor-devices' } }, url: '/monitor/devices/:monitorType/:monitorStatus' })
-    .state('menus.monitor-device-detail', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/device-detail.html', controller: 'ctrl-monitor-devicedetail' } }, url: '/monitor/device/:deviceId' })
-    .state('menus.monitor-device-detail-info', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/device-detail-info.html', controller: 'ctrl-monitor-devicedetail-info' } }, url: '/monitor/device/:deviceId/info' })
+    .state('menus.monitor-device-detail', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/device-detail.html', controller: 'ctrl-monitor-devicedetail' } }, url: '/monitor/device/:deviceSN/:monitorType' })
+    .state('menus.monitor-device-detail-info', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/device-detail-info.html', controller: 'ctrl-monitor-devicedetail-info' } }, url: '/monitor/devicedetail/info/:deviceId' })
+    .state('menus.monitor-device-detail-simulate', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/device-detail-simulate.html', controller: 'ctrl-monitor-devicedetail-simulate' } }, url: '/monitor/devicedetail/simulate/:deviceId' })
 
     //.state('menus.monitor-elevators', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/elevators.html', controller: 'ctrl-monitor-elevators' } }, url: '/monitor/elevators' })
     //.state('menus.monitor-elevator-detail', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/elevator-detail.html', controller: 'ctrl-monitor-elevatordetail' } }, url: '/monitor/elevators/:deviceId' })
@@ -94,7 +95,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('menus.check-projects', { views: { 'menus-check': { templateUrl: 'templates/check/projects.html', controller: 'ctrl-check-projects' } }, url: '/check/projects' })
     .state('menus.check-checks', { views: { 'menus-check': { templateUrl: 'templates/check/checks.html', controller: 'ctrl-check-checks' } }, url: '/check/projectchecks/:proId' })
     .state('menus.check-checkdetail', { views: { 'menus-check': { templateUrl: 'templates/check/check-detail.html', controller: 'ctrl-check-checkdetail' } }, url: '/check/checkdetail/:operType/:checkId' })
-    .state('menus.check-checkadd', { views: { 'menus-check': { templateUrl: 'templates/check/check-detail.html', controller: 'ctrl-check-checkdetail' } }, url: '/check/checkadd/:operType/:proId' })
+    .state('menus.check-checkadd', { views: { 'menus-check': { templateUrl: 'templates/check/check-detail.html', controller: 'ctrl-check-checkdetail' } }, url: '/check/checkadd/:operType/:proId/:proName/:checkUser' })
 
     .state('menus.board-projects', { views: { 'menus-board': { templateUrl: 'templates/board/projects.html', controller: 'ctrl-board-projects' } }, url: '/board/projects' })
     .state('menus.board-project-detail', { views: { 'menus-board': { templateUrl: 'templates/board/project-detail.html', controller: 'ctrl-board-projectdetail' } }, url: '/board/projects/:proId' })
@@ -107,5 +108,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state("menus.common-project-detail", { views: { 'menus-monitor': { templateUrl: 'templates/common/project-detail.html', controller: 'ctrl-common-projectdetail' } }, url: '/common/projects/:proId' })
 
     ;  // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/login');
+    if (window.localStorage["apikey"] != undefined) {
+        $urlRouterProvider.otherwise('/menus/monitor/main');
+    } else {
+        $urlRouterProvider.otherwise('/login');
+    }
 });

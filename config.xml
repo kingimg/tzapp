@@ -43,7 +43,7 @@
   <icon src="res/icons/windows-phone/icon-48.png" gap:platform="winphone"/>
   <icon src="res/icons/windows-phone/icon-173-tile.png" gap:platform="winphone" gap:role="background"/>
   <gap:splash src="res/screens/welcome.png" />
-  <gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-ldpi"/>
+  <!--<gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-ldpi"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-mdpi"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-hdpi"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-xhdpi"/>
@@ -53,7 +53,7 @@
   <gap:splash src="res/screens/welcome.png" gap:platform="ios" width="640" height="1136"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="ios" width="768" height="1024"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="ios" width="1024" height="768"/>
-  <gap:splash src="res/screens/welcome.png" gap:platform="winphone"/>
+  <gap:splash src="res/screens/welcome.png" gap:platform="winphone"/>-->
   <access origin="*"/>
   <plugin name="cordova-plugin-whitelist" version="1"/>
   <allow-intent href="http://*/*"/>

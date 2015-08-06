@@ -9,8 +9,8 @@
               <div class="input-label">
                   检查类型
               </div>
-              <select ng-selected="checkdetail.CheckType">
-                  <option value="6" selected>安全检查</option>
+              <select ng-model="checkdetail.CheckType">
+                  <option value="6">安全检查</option>
                   <option value="1">质量检查</option>
               </select>
           </label>
@@ -18,7 +18,7 @@
               <div class="input-label">
                   检查时间
               </div>
-              <input type="date" name="CheckTime" ng-model="checkdetail.CheckTime" />
+              <input type="date" name="CheckTime" value="{{checkdetail.CheckTime| date:'yyyy-MM-dd' }}"  ng-model="checkdetail.CheckTime" />
           </label>   
           <label class="item item-input">
               <div class="input-label">
@@ -30,8 +30,8 @@
               <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.Content1"></textarea>
           </label>
           <div class="item">
-              <div class="imgitem" ng-repeat="photo in photos"><img ng-src="{{photo.PicPath_s}}" /></div>
-              <div class="imgitem"><i class="ion-ios-camera plussize" ng-click="showActionsheet()"></i></div> 
+              <div class="imgitem" ng-repeat="photo in photos"><img ng-click="showPic('{{checkdetail.WebApiUrl}}{{photo.PicPath}}')" ng-src="{{checkdetail.WebApiUrl}}{{photo.PicPath_s}}" /></div>
+              <div class="imgitem imgitem-border"><i class="ion-ios-camera plussize" ng-click="showActionsheet()"></i></div> 
           </div>
           <br/>
           <button class="button button-positive button-block" ng-click="savecheck()">保存</button>         
