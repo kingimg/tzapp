@@ -1,4 +1,4 @@
-﻿// Ionic Starter App
+// Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -104,8 +104,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('menus.account-userinfo', { views: { 'menus-account': { templateUrl: 'templates/account/userinfo.html', controller: 'ctrl-account-userinfo' } }, url: '/account/userinfo' })
     .state('menus.account-zone', { views: { 'menus-account': { templateUrl: 'templates/account/zone.html', controller: 'ctrl-account-zone' } }, url: '/account/zone' })
 
-    .state("menus.common-company-detail", { views: { 'menus-monitor': { templateUrl: 'templates/common/company-detail.html', controller: 'ctrl-common-companydetail' } }, url: '/common/companys/:companyId' })
-    .state("menus.common-project-detail", { views: { 'menus-monitor': { templateUrl: 'templates/common/project-detail.html', controller: 'ctrl-common-projectdetail' } }, url: '/common/projects/:proId' })
+    .state("menus.common-company-detail", { views: { 'menus-monitor': { templateUrl: 'templates/common/company-detail.html', controller: 'ctrl-common-companydetail' } }, url: '/common/companys/:companyType/:deviceSN/:monitorType' })
+    .state("menus.common-project-detail", { views: { 'menus-monitor': { templateUrl: 'templates/common/project-detail.html', controller: 'ctrl-common-projectdetail' } }, url: '/common/projects/:deviceSN/:monitorType' })
 
     ;  // if none of the above states are matched, use this as the fallback
     if (window.localStorage["apikey"] != undefined) {
