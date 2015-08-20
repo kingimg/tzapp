@@ -14,12 +14,18 @@
                   <option value="1">质量检查</option>
               </select>
           </label>
-          <label class="item item-input">
+          <label class="item item-input" ng-if="isedit">
               <div class="input-label">
                   检查时间
               </div>
-              <input type="date" name="CheckTime" value="{{checkdetail.CheckTime| date:'yyyy-MM-dd' }}"  ng-model="checkdetail.CheckTime" />
-          </label>   
+              <input type="text" name="CheckTime" ng-model="checkdetail.CheckTime" value="{{checkdetail.CheckTime}}" />
+          </label>  
+          <label class="item item-input" ng-if="!isedit">
+              <div class="input-label">
+                  检查时间
+              </div>
+              <input type="date" name="CheckTime" ng-model="checkdetail.CheckTime" />
+          </label> 
           <label class="item item-input">
               <div class="input-label">
                   监督员

@@ -9,17 +9,17 @@
                 设备编号
                 <span class="item-note">{{devicedetail.DeviceNO}}</span>
             </div>  
-            <a class="item item-icon-right" href="#/menus/common/companys/1">
+            <a class="item item-icon-right" href="#/menus/common/companys/1/{{devicedetail.DeviceSN}}/{{devicedetail.MonitorType}}">
                 施工单位
                 <span class="item-note fixwidth">{{devicedetail.ContractorCompanyName}}</span>
                 <i class="icon ion-ios-arrow-right"></i>
             </a>
-            <a class="item item-icon-right" href="#/menus/common/companys/{{devicedetail.OwnerCompanyID}}">
+            <a class="item item-icon-right" href="#/menus/common/companys/2/{{devicedetail.DeviceSN}}/{{devicedetail.MonitorType}}">
                 产权单位
                 <span class="item-note fixwidth">{{devicedetail.OwnerCompanyName}}</span>
                 <i class="icon ion-ios-arrow-right"></i>
             </a> 
-            <a class="item item-icon-right" href="#/menus/common/projects/{{devicedetail.ProjectID}}">
+            <a class="item item-icon-right" href="#/menus/common/projects/{{devicedetail.DeviceSN}}/{{devicedetail.MonitorType}}">
                 工程名称
                 <span class="item-note fixwidth">{{devicedetail.ProjectName}}</span>
                 <i class="icon ion-ios-arrow-right"></i>

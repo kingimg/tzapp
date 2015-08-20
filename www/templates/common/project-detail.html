@@ -1,34 +1,30 @@
 ﻿<ion-view view-title="工程信息">
     <ion-content padding="false" has-bouncing="true">
-        <div class="list list-inset">            
+        <div class="list list-inset">
             <div class="item">
                 工程名称
-                <span class="item-note fixwidth">中栋国际二期</span>
-            </div>  
+                <span class="item-note fixwidth">{{projectdetail.ProjectName}}</span>
+            </div>
             <div class="item">
                 区域地址
-                <span class="item-note">浙江省,杭州市,萧山区</span>
-            </div>  
-            <a class="item">
+                <span class="item-note">{{projectdetail.AreaAddress}}</span>
+            </div>
+            <div class="item">
                 工程地址
-                <span class="item-note fixwidth">建设一路与风情大道交叉口</span>
-            </a> 
-            <a class="item">
+                <span class="item-note fixwidth">{{projectdetail.ProjectAddress}}</span>
+            </div>
+            <div class="item">
                 监管机构
-                <span class="item-note">萧山区</span>
-            </a>
-            <a class="item">
+                <span class="item-note">{{projectdetail.StationName}}</span>
+            </div>
+            <div class="item">
                 施工单位
-                <span class="item-note">博坤建设集团有限公司</span>
-            </a>
-            <a class="item">
+                <span class="item-note">{{projectdetail.ContractorCompanyName}}</span>
+            </div>
+            <div class="item">
                 监理单位
-                <span class="item-note">未知</span>
-            </a>
-            <a class="item">
-                建设单位
-                <span class="item-note">未知</span>
-            </a>
+                <span class="item-note">{{projectdetail.SupervisionCompanyName}}</span>
+            </div>
         </div>
     </ion-content>
 </ion-view>
