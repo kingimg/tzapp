@@ -1,25 +1,25 @@
-﻿//angular.module('starter.controllers', [])
+angular.module('starter.controllers', [])
 
 
-angular.module('starter.controllers', []).directive('dateFormat', ['$filter', function ($filter) {
-    var dateFilter = $filter('date');  
-    return {  
-        require: 'ngModel',  
-        link: function(scope, elm, attrs, ctrl) {    
-            function formatter(value) {
-                return dateFilter(value, 'yyyy-MM-dd'); //format 
-            }    
-            function parser() {  
-                return ctrl.$modelValue;  
-            }  
-            ctrl.$formatters.push(formatter);  
-            ctrl.$parsers.unshift(parser);  
-        }  
-    };  
-}])
+//angular.module('starter.controllers', []).directive('dateFormat', ['$filter', function ($filter) {
+//    var dateFilter = $filter('date');  
+//    return {  
+//        require: 'ngModel',  
+//        link: function(scope, elm, attrs, ctrl) {    
+//            function formatter(value) {
+//                return dateFilter(value, 'yyyy-MM-dd'); //format 
+//            }    
+//            function parser() {  
+//                return ctrl.$modelValue;  
+//            }  
+//            ctrl.$formatters.push(formatter);  
+//            ctrl.$parsers.unshift(parser);  
+//        }  
+//    };  
+//}])
 
 .constant('ApiEndpoint', {   
-    //url: 'http://192.168.1.223:8085'  
+    //url: 'http://192.168.23.1:8085'  
     url: 'http://tzapp.safe110.net:8085'
 })
 
@@ -110,6 +110,8 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
         $scope.devicedetail = {};
         $http.post(ApiEndpoint.url + '/monitor/GetDeviceDetailInfo?deviceSN=' + $stateParams.deviceSN + '&monitorType=' + $stateParams.monitorType + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
+                $scope.devicedetail.MonitorType = $stateParams.monitorType;
+                $scope.devicedetail.DeviceSN = $stateParams.deviceSN;
                 $scope.devicedetail.FilingNO = data.obj.FilingNO;
                 $scope.devicedetail.DeviceNO = data.obj.DeviceNO;
                 $scope.devicedetail.OwnerCompanyName = data.obj.OwnerCompanyName;
@@ -250,18 +252,20 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
         $state.go("menus.check-checkadd", { operType: 'add', proId: $stateParams.proId, proName: proName, checkUser: checkUser });
     };
 })
-.controller('ctrl-check-checkdetail', function ($scope, $stateParams, $window, $http ,$ionicActionSheet, ApiEndpoint) {
+.controller('ctrl-check-checkdetail', function ($scope, $stateParams, $window, $http, $ionicActionSheet, $filter,ApiEndpoint) {
     $scope.checkdetail = {};
     $scope.photos = [];
+    $scope.isedit = $stateParams.operType == 'edit';
     if ($stateParams.operType=='edit'){        
         $http.post(ApiEndpoint.url + '/zaSys/checkDetail/?checkId=' + $stateParams.checkId + '&r=' + Math.random()).success(function (data) {
             if (data.success) {               
                 $scope.checkdetail.ProName = data.rows[0].ProName;
                 $scope.checkdetail.CheckType = data.rows[0].CheckType;
-                $scope.checkdetail.CheckTime = data.rows[0].CheckTime;                
+                $scope.checkdetail.CheckTime = $filter("date")(data.rows[0].CheckTime.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//'2011-11-11';//data.rows[0].CheckTime.replace(/\D/igm, "").trim();
                 $scope.checkdetail.CheckUser = data.rows[0].CheckUser;
                 $scope.checkdetail.Content1 = data.rows[0].Content1;
                 $scope.checkdetail.WebApiUrl = ApiEndpoint.url;
+                //alert($scope.checkdetail.CheckTime);
                 if (data.obj) { $scope.photos = $scope.photos.concat(data.obj); }                 
             } else {
                 alert('登录超时，请重新登录');
@@ -296,6 +300,7 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
     $scope.savecheck = function () {
         if ($stateParams.operType == 'edit') {
             var pics = getPicArr();
+            
             $http.post(ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
                     alert("修改成功！");
@@ -307,9 +312,8 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
             })
         } else if ($stateParams.operType == 'add') {
             var pics = getPicArr();            
-            var now = new Date(Date.parse($scope.checkdetail.CheckTime));
-            var year = now.getFullYear(); var month = now.getMonth() + 1; var date = now.getDate();
-            $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + year + "-" + month + "-" + date + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
+            var checkdate = $filter("date")($scope.checkdetail.CheckTime, 'yyyy-MM-dd');
+            $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
                     alert("保存成功！");
                 } else {
@@ -338,7 +342,8 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
     function uploadPhoto(imageURI) {        
         var done = function (r) {
             var reg = eval('(' + r.response + ')');
-            var photo = { PicPath: reg.obj , PicPath_s: imageURI };
+            var photo = { PicPath: reg.obj, PicPath_s: imageURI };
+            alert(photo.PicPath);
             $scope.$apply(function () {
                 $scope.photos.push(photo);
             });      
@@ -501,11 +506,49 @@ angular.module('starter.controllers', []).directive('dateFormat', ['$filter', fu
 
 })
 
-.controller('ctrl-common-companydetail', function ($scope) {
-
+.controller('ctrl-common-companydetail', function ($scope, $stateParams, $http, $state, ApiEndpoint) {
+    $scope.companydetail = {};
+    $http.post(ApiEndpoint.url + '/basic/GetDeviceCompanyDetailInfo?deviceSN=' + $stateParams.deviceSN + '&monitorType=' + $stateParams.monitorType + '&r=' + Math.random()).success(function (data) {
+        if (data.success) {
+            $scope.companydetail.CompanyName = data.obj.ContractorCompanyName;
+            if($stateParams.companyType=="1")
+            { 
+                $scope.companydetail.CompanyType = "施工单位";
+                $scope.companydetail.CompanyAddress = data.obj.ContractorCompanyAddress;
+                $scope.companydetail.TecPerson = data.obj.TechniqueMan;
+                $scope.companydetail.LinkPhone = data.obj.TechniqueTel;
+                $scope.companydetail.WebUrl = data.obj.ContractorCompanyWebUrl;
+                $scope.companydetail.Fax = data.obj.ContractorCompanyFax;
+            }
+            else
+            {
+                $scope.companydetail.CompanyType = "产权单位";
+                $scope.companydetail.CompanyAddress = data.obj.OwnerCompanyAddress;
+                $scope.companydetail.TecPerson = data.obj.OwnerCompanyTechniqueMan;
+                $scope.companydetail.LinkPhone = data.obj.OwnerCompanyTechniqueTel;
+                $scope.companydetail.WebUrl = data.obj.OwnerCompanyWebUrl;
+                $scope.companydetail.Fax = data.obj.OwnerCompanyFax;
+            }
+        } else {
+            alert(data.msg);
+        }
+    });
 })
-.controller('ctrl-common-projectdetail', function ($scope) {
-
+.controller('ctrl-common-projectdetail', function ($scope, $stateParams, $http, $state, ApiEndpoint) {
+    $scope.projectdetail = {};
+    $http.post(ApiEndpoint.url + '/basic/GetDeviceCompanyDetailInfo?deviceSN=' + $stateParams.deviceSN + '&monitorType=' + $stateParams.monitorType + '&r=' + Math.random()).success(function (data) {
+        if (data.success) {
+            $scope.projectdetail.ProjectName = data.obj.ProjectName;
+            $scope.projectdetail.ProjectAddress = data.obj.ProjectAddress;
+            $scope.projectdetail.AreaAddress = data.obj.AreaAddress;
+            $scope.projectdetail.StationName = data.obj.StationName;
+            $scope.projectdetail.ContractorCompanyName = data.obj.ContractorCompanyName;
+            $scope.projectdetail.ContractorCompanyName = data.obj.ContractorCompanyName;
+            $scope.projectdetail.SupervisionCompanyName = data.obj.SupervisionCompanyName;
+        } else {
+            alert(data.msg);
+        }
+    });
 })
 ;
 
