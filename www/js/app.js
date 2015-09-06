@@ -1,4 +1,4 @@
-// Ionic Starter App
+﻿// Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -109,8 +109,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     ;  // if none of the above states are matched, use this as the fallback
     if (window.localStorage["apikey"] != undefined) {
-        $urlRouterProvider.otherwise('/menus/monitor/main');
+        $urlRouterProvider.otherwise('/menus/check/projects');
     } else {
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/login'); 
     }
 });

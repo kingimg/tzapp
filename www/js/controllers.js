@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+﻿angular.module('starter.controllers', [])
 
 
 //angular.module('starter.controllers', []).directive('dateFormat', ['$filter', function ($filter) {
@@ -19,8 +19,8 @@ angular.module('starter.controllers', [])
 //}])
 
 .constant('ApiEndpoint', {   
-    //url: 'http://192.168.23.1:8085'  
-    url: 'http://tzapp.safe110.net:8085'
+    url: 'http://192.168.23.1:8085'   
+    //url: 'http://tzapp.safe110.net:8085'
 })
 
 
@@ -38,7 +38,7 @@ angular.module('starter.controllers', [])
             template: '密码失效或不正确!'
         });
         alertPopup.then(function (res) {
-            console.log('Thank you for not eating my delicious ice cream cone');
+            //console.log('Thank you for not eating my delicious ice cream cone');
         });
     };
     $scope.login = function (user) {        
@@ -47,7 +47,7 @@ angular.module('starter.controllers', [])
                 window.localStorage['apikey'] = data.obj;
                 $http.defaults.headers.common['apikey'] = window.localStorage["apikey"];
                 //$state.go('menus.home');
-                $state.go('menus.monitor-main');
+                $state.go('menus.check-projects');
             } else {
                 $scope.showAlert();
             }
@@ -263,7 +263,7 @@ angular.module('starter.controllers', [])
                 $scope.checkdetail.CheckType = data.rows[0].CheckType;
                 $scope.checkdetail.CheckTime = $filter("date")(data.rows[0].CheckTime.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//'2011-11-11';//data.rows[0].CheckTime.replace(/\D/igm, "").trim();
                 $scope.checkdetail.CheckUser = data.rows[0].CheckUser;
-                $scope.checkdetail.Content1 = data.rows[0].Content1;
+                $scope.checkdetail.Content1 = data.rows[0].ContentMo;
                 $scope.checkdetail.WebApiUrl = ApiEndpoint.url;
                 //alert($scope.checkdetail.CheckTime);
                 if (data.obj) { $scope.photos = $scope.photos.concat(data.obj); }                 
@@ -489,7 +489,9 @@ angular.module('starter.controllers', [])
                 window.localStorage.removeItem('apikey'); $http.defaults.headers.common['apikey'] = "";
                 $state.go('login');
             } else {
-                $scope.showAlert();
+                //$scope.showAlert();
+                window.localStorage.removeItem('apikey'); $http.defaults.headers.common['apikey'] = "";
+                $state.go('login');
                 //alert(data.msg);
             }
         }).error(function (response) {
