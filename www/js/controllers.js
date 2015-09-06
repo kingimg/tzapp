@@ -19,8 +19,8 @@
 //}])
 
 .constant('ApiEndpoint', {   
-    url: 'http://192.168.23.1:8085'   
-    //url: 'http://tzapp.safe110.net:8085'
+    //url: 'http://192.168.23.1:8085'   
+    url: 'http://tzapp.safe110.net:8085'
 })
 
 
