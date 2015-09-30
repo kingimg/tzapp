@@ -19,7 +19,7 @@
 //}])
 
 .constant('ApiEndpoint', {   
-    //url: 'http://192.168.23.1:8085'   
+    //url: 'http://192.168.3.63:8085'    
     url: 'http://tzapp.safe110.net:8085'
 })
 
@@ -252,7 +252,7 @@
         $state.go("menus.check-checkadd", { operType: 'add', proId: $stateParams.proId, proName: proName, checkUser: checkUser });
     };
 })
-.controller('ctrl-check-checkdetail', function ($scope, $stateParams, $window, $http, $ionicActionSheet, $filter,ApiEndpoint) {
+.controller('ctrl-check-checkdetail', function ($scope, $stateParams, $window, $http, $ionicActionSheet, $filter, ApiEndpoint, $ionicLoading, $timeout) {
     $scope.checkdetail = {};
     $scope.photos = [];
     $scope.isedit = $stateParams.operType == 'edit';
@@ -266,10 +266,19 @@
                 $scope.checkdetail.Content1 = data.rows[0].ContentMo;
                 $scope.checkdetail.WebApiUrl = ApiEndpoint.url;
                 //alert($scope.checkdetail.CheckTime);
-                if (data.obj) { $scope.photos = $scope.photos.concat(data.obj); }                 
+                //alert(data.obj);
+                if (data.obj) {
+                    
+                    for (var i = 0; i < data.obj.length;i++)
+                    {
+                        data.obj[i].PicPath_s = ApiEndpoint.url + data.obj[i].PicPath_s
+                    }
+                    $scope.photos = $scope.photos.concat(data.obj);
+                }
             } else {
-                alert('登录超时，请重新登录');
-                $scope.login();
+                //alert('登录超时，请重新登录');
+                //$scope.login();
+                alert(data);
                 return;
             }
         })
@@ -294,16 +303,36 @@
             }
         });                    
     };
-    $scope.showPic = function (url) {
+    $scope.showPic = function (url) {        
         $window.open(url, '_blank', "width=100%,height=100%,resizable=1", '')
     };
     $scope.savecheck = function () {
         if ($stateParams.operType == 'edit') {
-            var pics = getPicArr();
             
+            var pics = getPicArr();            
             $http.post(ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
-                    alert("修改成功！");
+
+                    $ionicLoading.show({
+                        template: '正在签名...'
+                    });
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '签名成功...'
+                        });
+                    },1000);
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '正在打印...'
+                        });
+                    }, 2000);
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '打印失败...', duration: 1000
+                        });
+                    }, 3000);
+
+                    //alert("修改成功！");
                 } else {
                     alert('登录超时，请重新登录');
                     $scope.login();
@@ -342,8 +371,7 @@
     function uploadPhoto(imageURI) {        
         var done = function (r) {
             var reg = eval('(' + r.response + ')');
-            var photo = { PicPath: reg.obj, PicPath_s: imageURI };
-            alert(photo.PicPath);
+            var photo = { PicPath: reg.obj, PicPath_s: imageURI };            
             $scope.$apply(function () {
                 $scope.photos.push(photo);
             });      

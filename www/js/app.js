@@ -108,9 +108,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state("menus.common-project-detail", { views: { 'menus-monitor': { templateUrl: 'templates/common/project-detail.html', controller: 'ctrl-common-projectdetail' } }, url: '/common/projects/:deviceSN/:monitorType' })
 
     ;  // if none of the above states are matched, use this as the fallback
-    if (window.localStorage["apikey"] != undefined) {
-        $urlRouterProvider.otherwise('/menus/check/projects');
-    } else {
-        $urlRouterProvider.otherwise('/login'); 
-    }
+    $urlRouterProvider.otherwise('/login');
+    //if (window.localStorage["apikey"] != undefined) {
+    //    $urlRouterProvider.otherwise('/menus/check/projects');
+    //} else {
+    //    $urlRouterProvider.otherwise('/login'); 
+    //}
 });

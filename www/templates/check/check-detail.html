@@ -36,11 +36,11 @@
               <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.Content1"></textarea>
           </label>
           <div class="item">
-              <div class="imgitem" ng-repeat="photo in photos"><img ng-click="showPic('{{checkdetail.WebApiUrl}}{{photo.PicPath}}')" ng-src="{{checkdetail.WebApiUrl}}{{photo.PicPath_s}}" /></div>
+              <div class="imgitem" ng-repeat="photo in photos"><img ng-click="showPic('{{checkdetail.WebApiUrl}}{{photo.PicPath}}')" ng-src="{{photo.PicPath_s}}" /></div>
               <div class="imgitem imgitem-border"><i class="ion-ios-camera plussize" ng-click="showActionsheet()"></i></div> 
           </div>
           <br/>
-          <button class="button button-positive button-block" ng-click="savecheck()">保存</button>         
+          <button class="button button-positive button-block" ng-click="savecheck()">签名打印</button>         
     </div>
   </ion-content>
 </ion-view>
