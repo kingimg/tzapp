@@ -344,7 +344,25 @@
             var checkdate = $filter("date")($scope.checkdetail.CheckTime, 'yyyy-MM-dd');
             $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
-                    alert("保存成功！");
+                    $ionicLoading.show({
+                        template: '正在签名...'
+                    });
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '签名成功...'
+                        });
+                    }, 1000);
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '正在打印...'
+                        });
+                    }, 2000);
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '打印失败...', duration: 1000
+                        });
+                    }, 3000);
+                    //alert("保存成功！");
                 } else {
                     alert('登录超时，请重新登录');
                     $scope.login();
