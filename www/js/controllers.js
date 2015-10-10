@@ -41,7 +41,8 @@
             //console.log('Thank you for not eating my delicious ice cream cone');
         });
     };
-    $scope.login = function (user) {        
+    $scope.login = function (user) {
+        if (user.username == "" || user.password == "") return;
         $http.get(ApiEndpoint.url + '/user/login/?loginName=' + user.username + '&passWord=' + user.password + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 window.localStorage['apikey'] = data.obj;
@@ -57,6 +58,60 @@
             }
         });
     };
+
+    $scope.login2 = function(user)
+    {
+        makePhoto();
+    }
+
+    function onPhotoDone(imageURI) {
+        uploadPhoto(imageURI);
+    }
+    function onPhotoFail(message) {
+        if (message.indexOf('cancelled') < 0) {
+            alert('出錯了：' + message);
+        }
+    }
+    function getPicArr() {
+        var str = '';
+        for (var i in $scope.photos) {
+            str += $scope.photos[i].PicPath + ',';
+        }
+        return str.substr(0, str.lastIndexOf(','));
+    }
+    function uploadPhoto(imageURI) {
+        var done = function (r) {
+            var reg = eval('(' + r.response + ')');
+            var photo = { PicPath: reg.obj, PicPath_s: imageURI };
+            $scope.$apply(function () {
+                $scope.photos.push(photo);
+            });
+        };
+
+        var fail = function (e) {
+            alert(e.code);
+        };
+
+        var options = new FileUploadOptions();
+        options.fileKey = "fileAddPic";
+        options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1).split("?")[0];
+        //如果是图片格式，就用image/jpeg，其他文件格式上官网查API
+        options.mimeType = "image/jpeg";
+        options.chunkedMode = false;
+        var ft = new FileTransfer();
+        ft.upload(imageURI, encodeURI(ApiEndpoint.url + "/common/upload/?fixname=1&r=" + Math.random()), done, fail, options);
+    }
+    function makePhoto() {
+        navigator.camera.getPicture(onPhotoDone, onPhotoFail, {
+            quality: 100, targetWidth: 800, targetHeight: 800, destinationType: navigator.camera.DestinationType.FILE_URI
+        });
+    }
+    function takePhoto() {
+        navigator.camera.getPicture(onPhotoDone, onPhotoFail, {
+            quality: 100, targetWidth: 800, targetHeight: 800, destinationType: navigator.camera.DestinationType.FILE_URI
+        , sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM
+        });
+    }
     //$scope.dologin();
 })
 .controller('ctrl-home', function ($scope) {
@@ -313,24 +368,24 @@
             $http.post(ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
 
-                    //$ionicLoading.show({
-                    //    template: '正在签名...'
-                    //});
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '签名成功...'
-                    //    });
-                    //},1000);
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '正在打印...'
-                    //    });
-                    //}, 2000);
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '打印失败...', duration: 1000
-                    //    });
-                    //}, 3000);
+                    $ionicLoading.show({
+                        template: '正在签名...'
+                    });
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '签名成功...'
+                        });
+                    },1000);
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '正在打印...'
+                        });
+                    }, 2000);
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '打印失败...', duration: 1000
+                        });
+                    }, 3000);
 
                     $ionicLoading.show({
                         template: '修改成功！', duration: 1000
@@ -346,24 +401,24 @@
             var checkdate = $filter("date")($scope.checkdetail.CheckTime, 'yyyy-MM-dd');
             $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
-                    //$ionicLoading.show({
-                    //    template: '正在签名...'
-                    //});
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '签名成功...'
-                    //    });
-                    //}, 1000);
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '正在打印...'
-                    //    });
-                    //}, 2000);
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '打印失败...', duration: 1000
-                    //    });
-                    //}, 3000);
+                    $ionicLoading.show({
+                        template: '正在签名...'
+                    });
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '签名成功...'
+                        });
+                    }, 1000);
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '正在打印...'
+                        });
+                    }, 2000);
+                    $timeout(function () {
+                        $ionicLoading.show({
+                            template: '打印失败...', duration: 1000
+                        });
+                    }, 3000);
                     $ionicLoading.show({
                     template: '保存成功！', duration: 1000
                     });
