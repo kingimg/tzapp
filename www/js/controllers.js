@@ -387,9 +387,9 @@
                         });
                     }, 3000);
 
-                    $ionicLoading.show({
-                        template: '修改成功！', duration: 1000
-                    });
+                    //$ionicLoading.show({
+                    //    template: '修改成功！', duration: 1000
+                    //});
                 } else {
                     alert('登录超时，请重新登录');
                     $scope.login();
@@ -419,9 +419,9 @@
                             template: '打印失败...', duration: 1000
                         });
                     }, 3000);
-                    $ionicLoading.show({
-                    template: '保存成功！', duration: 1000
-                    });
+                    //$ionicLoading.show({
+                    //template: '保存成功！', duration: 1000
+                    //});
                 } else {
                     alert('登录超时，请重新登录');
                     $scope.login();
