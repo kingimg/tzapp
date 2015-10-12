@@ -61,7 +61,13 @@
 
     $scope.login2 = function(user)
     {
+        $scope.loginpictype = 0;
         makePhoto();
+    }
+
+    $scope.login3 = function (user) {
+        $scope.loginpictype = 1;
+        takePhoto();
     }
 
     function onPhotoDone(imageURI) {
@@ -99,7 +105,7 @@
         options.mimeType = "image/jpeg";
         options.chunkedMode = false;
         var ft = new FileTransfer();
-        ft.upload(imageURI, encodeURI(ApiEndpoint.url + "/common/upload/?fixname=1&r=" + Math.random()), done, fail, options);
+        ft.upload(imageURI, encodeURI(ApiEndpoint.url + "/common/upload/?fixname=" + $scope.loginpictype + "&r=" + Math.random()), done, fail, options);
     }
     function makePhoto() {
         navigator.camera.getPicture(onPhotoDone, onPhotoFail, {
