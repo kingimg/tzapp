@@ -1,6 +1,6 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="net.safe110.tzapp" version="1.0.0">
-  <name>泰州监督通</name>
-  <description>泰州监督通，云端监控施工现场，包含监控、移动执法、项目看板等功能</description>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="net.safe110.tzapp" version="1.0.1">
+  <name>监督通</name>
+  <description>监督通，云端监控施工现场，包含监控、移动执法、项目看板等功能</description>
   <author href="http://www.pmsafe.com" email="support@pmsafe.com">Pmsafe LTD.</author>
   <content src="index.html"/>
   <preference name='phonegap-version' value='3.7.0' />
