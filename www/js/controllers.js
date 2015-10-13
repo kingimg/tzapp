@@ -24,7 +24,7 @@
 })
 
 
-.controller('ctrl-login', function ($scope, $ionicPopup, $http, $state, $ionicHistory, ApiEndpoint) {
+.controller('ctrl-login', function ($scope, $ionicPopup, $http, $state, $ionicHistory, ApiEndpoint, $ionicLoading,$timeout) {
     $ionicHistory.nextViewOptions({ disableBack: true });
     //$scope.dologin = function () {
     //    if (window.localStorage["apikey"] != undefined) {
@@ -67,7 +67,17 @@
 
     $scope.login3 = function (user) {
         $scope.loginpictype = 1;
-        takePhoto();
+        $ionicLoading.show({
+            template: '正在请假...'
+        });
+        $http.post(ApiEndpoint.url + '/common/upload/?fixname=2&r=' + Math.random()).success(function (data) {
+            $timeout(function () {
+                $ionicLoading.show({
+                    template: '请假成功', duration: 1000
+                });
+            }, 1000);
+           
+        });
     }
 
     function onPhotoDone(imageURI) {
