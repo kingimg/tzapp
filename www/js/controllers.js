@@ -43,6 +43,7 @@
     };
     $scope.login = function (user) {
         if (user.username == "" || user.password == "") return;
+        
         $http.get(ApiEndpoint.url + '/user/login/?loginName=' + user.username + '&passWord=' + user.password + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 window.localStorage['apikey'] = data.obj;
@@ -332,9 +333,10 @@
             if (data.success) {               
                 $scope.checkdetail.ProName = data.rows[0].ProName;
                 $scope.checkdetail.CheckType = data.rows[0].CheckType;
+                $scope.checkdetail.CheckMode = data.rows[0].CheckMode;
                 $scope.checkdetail.CheckTime = $filter("date")(data.rows[0].CheckTime.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//'2011-11-11';//data.rows[0].CheckTime.replace(/\D/igm, "").trim();
                 $scope.checkdetail.CheckUser = data.rows[0].CheckUser;
-                $scope.checkdetail.Content1 = data.rows[0].ContentMo;
+                $scope.checkdetail.Content1 = data.rows[0].F1;
                 $scope.checkdetail.WebApiUrl = ApiEndpoint.url;
                 //alert($scope.checkdetail.CheckTime);
                 //alert(data.obj);
@@ -415,7 +417,7 @@
         } else if ($stateParams.operType == 'add') {
             var pics = getPicArr();            
             var checkdate = $filter("date")($scope.checkdetail.CheckTime, 'yyyy-MM-dd');
-            $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
+            $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
                     //$ionicLoading.show({
                     //    template: '正在签名...'

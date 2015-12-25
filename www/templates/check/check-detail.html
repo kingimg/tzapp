@@ -10,8 +10,38 @@
                   检查类型
               </div>
               <select ng-model="checkdetail.CheckType">
-                  <option value="6">安全检查</option>
+                  <option value="0">安全检查</option>
                   <option value="1">质量检查</option>
+              </select>
+          </label>
+          <label class="item item-input item-select" ng-if="checkdetail.CheckType==0">
+              <div class="input-label">
+                  检查方式
+              </div>
+              <select ng-model="checkdetail.CheckMode">
+                  <option value="21">建设单位安全生产行为</option>
+                  <option value="22">施工单位安全生产行为</option>
+                  <option value="23">监理单位安全生产行为</option>
+                  <option value="24">建设工程安全生产监督抽查</option>
+                  <option value="25">建设工程安全生产约谈</option>
+                  <option value="26">行政处罚</option>
+                  <option value="31">春季复工</option>
+                  <option value="32">扬尘控制</option>
+                  <option value="33">深基坑</option>
+                  <option value="34">机械设备</option>
+                  <option value="35">高支模</option>
+                  <option value="36">脚手架</option>
+                  <option value="37">安全防护</option>
+                  <option value="38">现场防火</option>
+              </select>
+          </label>
+          <label class="item item-input item-select" ng-if="checkdetail.CheckType==1">
+              <div class="input-label">
+                  检查方式
+              </div>
+              <select ng-model="checkdetail.CheckMode">
+                  <option value="41">监督检查</option>
+                  <option value="42">现场踏勘</option>                  
               </select>
           </label>
           <label class="item item-input" ng-if="isedit">
