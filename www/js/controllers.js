@@ -443,9 +443,9 @@ angular.module('starter.controllers', [])
         //        //console.log("upload error code" + error.code);
         //    }
         //);
-        var filepath = "file:///storage/emulated/0/andriod/data/net.safe110.tzapp/cache/1.pdf";
+        var filepath = $window.cordova.file.dataDirectory + "/1.pdf";
         //filepath = "www/res/file.pdf";
-        
+        alert(filepath);
         //window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
         window.plugins.socialsharing.share('检查文件', "subject", filepath);
     };
