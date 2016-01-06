@@ -447,7 +447,7 @@ angular.module('starter.controllers', [])
         //filepath = "www/res/file.pdf";
         //alert(filepath);
         //window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
-        window.plugins.socialsharing.share('检查文件', "subject", null,"http://121.199.75.88:8085/file.pdf");
+        window.plugins.socialsharing.share('检查文件', "subject", filepath);
     };
     $scope.savecheck = function () {
         if ($stateParams.operType == 'edit') {
