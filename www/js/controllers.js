@@ -1,6 +1,6 @@
-angular.module('starter.controllers', [])
+﻿angular.module('starter.controllers', [])
 
-
+ 
 //angular.module('starter.controllers', []).directive('dateFormat', ['$filter', function ($filter) {
 //    var dateFilter = $filter('date');  
 //    return {  
@@ -442,7 +442,7 @@ angular.module('starter.controllers', [])
         //    }
         //);
         var filepath = window.appRootDir.toURL() + "1.pdf";
-        filepath = "www/res/file.pdf";
+        //filepath = "www/res/file.pdf";
         //alert(filepath);
         //window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
         window.plugins.socialsharing.share('检查文件', filepath, filepath);
