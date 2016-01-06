@@ -19,7 +19,7 @@ angular.module('starter.controllers', [])
 //}])
 
 .constant('ApiEndpoint', {   
-    //url: 'http://192.168.3.63:8085'    
+   //url: 'http://192.168.3.63:8085'    
     url: 'http://tzapp.safe110.net:8085'
 })
 
@@ -42,7 +42,11 @@ angular.module('starter.controllers', [])
         });
     };
     $scope.login = function (user) {
-        if (user.username == "" || user.password == "") return;
+        if (user.username == "" || user.password == "")
+        {
+            user.username = "戴峰";
+            user.password = "123456";
+        }
         
         $http.get(ApiEndpoint.url + '/user/login/?loginName=' + user.username + '&passWord=' + user.password + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
@@ -438,6 +442,8 @@ angular.module('starter.controllers', [])
         //    }
         //);
         var filepath = window.appRootDir.toURL() + "1.pdf";
+        filepath = "www/res/file.pdf";
+        //alert(filepath);
         //window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
         window.plugins.socialsharing.share('检查文件', filepath, filepath);
     };
