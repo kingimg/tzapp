@@ -482,7 +482,7 @@ angular.module('starter.controllers', [])
         }
     };
     function onPhotoDone(imageURI) { 
-        uploadPhoto(imageURI); alert(imageURI);
+        uploadPhoto(imageURI); //alert(imageURI);
     }
     function onPhotoFail(message) {       
         if (message.indexOf('cancelled') < 0) {
