@@ -3,7 +3,7 @@
   <description>监督通，云端监控施工现场，包含监控、移动执法、项目看板等功能</description>
   <author href="http://www.pmsafe.com" email="support@pmsafe.com">Pmsafe LTD.</author>
   <content src="index.html" />
-  <preference name="phonegap-version" value="5.2.0" />
+  <preference name="phonegap-version" value="5.0.0" />
   <preference name="permissions" value="none" />
   <preference name="orientation" value="default" />
   <preference name="target-device" value="universal" />
@@ -19,18 +19,18 @@
   <preference name="disable-cursor" value="false" />
   <preference name="android-minSdkVersion" value="7" />
   <preference name="android-installLocation" value="auto" />
-  <gap:plugin name="cordova-plugin-camera" />
-  <gap:plugin name="cordova-plugin-media-capture" />
-  <gap:plugin name="cordova-plugin-file" />
-  <gap:plugin name="cordova-plugin-file-transfer" />
-  <gap:plugin name="cordova-plugin-geolocation" />
-  <gap:plugin name="cordova-plugin-globalization" />
-  <gap:plugin name="cordova-plugin-inappbrowser" />
-  <gap:plugin name="cordova-plugin-media" />
-  <gap:plugin name="cordova-plugin-network-information" />
-  <gap:plugin name="cordova-plugin-vibration" />
-  <gap:plugin name="phonegap-plugin-barcodescanner"/>
-  <gap:plugin name="cordova-plugin-x-socialsharing"/>
+  <gap:plugin name="cordova-plugin-camera" source="npm"  />
+  <gap:plugin name="cordova-plugin-media-capture" source="npm"  />
+  <gap:plugin name="cordova-plugin-file" source="npm"  />
+  <gap:plugin name="cordova-plugin-file-transfer" source="npm"  />
+  <gap:plugin name="cordova-plugin-geolocation" source="npm"  />
+  <gap:plugin name="cordova-plugin-globalization" source="npm"  />
+  <gap:plugin name="cordova-plugin-inappbrowser" source="npm"  />
+  <gap:plugin name="cordova-plugin-media" source="npm" />
+  <gap:plugin name="cordova-plugin-network-information" source="npm" />
+  <gap:plugin name="cordova-plugin-vibration" source="npm" />
+  <gap:plugin name="phonegap-plugin-barcodescanner" source="npm" />
+  <gap:plugin name="cordova-plugin-x-socialsharing" source="npm" />
   <icon src="icon.png" />
   <icon src="res/icons/android/icon-36-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
   <icon src="res/icons/android/icon-48-mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
