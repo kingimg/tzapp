@@ -42,13 +42,14 @@ angular.module('starter.controllers', [])
         });
     };
     $scope.login = function (user) {
-        if (user.username == "" || user.password == "")
-        {
-            user.username = "戴峰";
-            user.password = "123456";
-        }
-        
-        $http.get(ApiEndpoint.url + '/user/login/?loginName=' + user.username + '&passWord=' + user.password + '&r=' + Math.random()).success(function (data) {
+        ////if (user.username == null && user.password == null)
+        ////{
+        //    //user.username = "戴峰";
+        //    user.password = "123456";
+        ////}
+        //    alert(0); return;
+            var uname = "戴峰"; var upass = "123456";
+        $http.get(ApiEndpoint.url + '/user/login/?loginName=' + uname + '&passWord=' + upass + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 window.localStorage['apikey'] = data.obj;
                 $http.defaults.headers.common['apikey'] = window.localStorage["apikey"];
@@ -445,7 +446,7 @@ angular.module('starter.controllers', [])
         //filepath = "www/res/file.pdf";
         
         //window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
-        window.plugins.socialsharing.share('检查文件', filepath, filepath);
+        window.plugins.socialsharing.share('检查文件', "subject", filepath);
     };
     $scope.savecheck = function () {
         if ($stateParams.operType == 'edit') {
