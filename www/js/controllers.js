@@ -20,7 +20,8 @@ angular.module('starter.controllers', [])
 
 .constant('ApiEndpoint', {   
    //url: 'http://192.168.3.63:8085'    
-    url: 'http://tzapp.safe110.net:8085'
+    //url: 'http://tzapp2.safe110.net:8085'
+    url: 'http://121.199.75.88:4138:8085'
 })
 
 
