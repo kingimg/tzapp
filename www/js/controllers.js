@@ -423,21 +423,22 @@ angular.module('starter.controllers', [])
         })
     };
     $scope.printcheck2 = function () {
-        var uri = encodeURI(ApiEndpoint.url + "/1.pdf");
-        var fileTransfer = new FileTransfer(); 
-        fileTransfer.download(
-            uri,
-            window.appRootDir + "1.pdf",
-            function (entry) {
-                alert("download complete: " + entry.toURL());
-            },
-            function (error) {
-                //console.log("download error source " + error.source);
-                //console.log("download error target " + error.target);
-                //console.log("upload error code" + error.code);
-            }
-        );
-        //window.plugins.socialsharing.shareVia('epson.print', '检查文件', 'www/res/file.pdf', 'www/res/file.pdf', null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
+        //var uri = encodeURI(ApiEndpoint.url + "/1.pdf");
+        //var fileTransfer = new FileTransfer(); 
+        //fileTransfer.download(
+        //    uri,
+        //    window.appRootDir + "1.pdf",
+        //    function (entry) {
+        //        alert("download complete: " + entry.toURL());
+        //    },
+        //    function (error) {
+        //        //console.log("download error source " + error.source);
+        //        //console.log("download error target " + error.target);
+        //        //console.log("upload error code" + error.code);
+        //    }
+        //);
+        var filepath = window.appRootDir.toURL() + "1.pdf";
+        window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
 
     };
     $scope.savecheck = function () {
