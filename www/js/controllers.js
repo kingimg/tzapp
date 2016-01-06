@@ -441,13 +441,13 @@ angular.module('starter.controllers', [])
         //        //console.log("download error source " + error.source);
         //        //console.log("download error target " + error.target);
         //        //console.log("upload error code" + error.code);
-        //    }
+        //    }file:///storage/emulated/0/andriod/data/net.safe110.tzapp/cache
         //);
-        var filepath = $window.cordova.file.dataDirectory + "1.pdf";
+        var filepath = $window.cordova.file.dataDirectory.replace("file:///","file://") + "1.pdf";
         //filepath = "www/res/file.pdf";
         //alert(filepath);
         //window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
-        window.plugins.socialsharing.share('检查文件', "subject", "http://121.199.75.88:8085/file.pdf");
+        window.plugins.socialsharing.share('检查文件', "subject", filepath);
     };
     $scope.savecheck = function () {
         if ($stateParams.operType == 'edit') {
