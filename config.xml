@@ -3,7 +3,7 @@
   <description>监督通，云端监控施工现场，包含监控、移动执法、项目看板等功能</description>
   <author href="http://www.pmsafe.com" email="support@pmsafe.com">Pmsafe LTD.</author>
   <content src="index.html" />
-  <preference name="phonegap-version" value="5.3.9" />
+  <preference name="phonegap-version" value="5.2.0" />
   <preference name="permissions" value="none" />
   <preference name="orientation" value="default" />
   <preference name="target-device" value="universal" />
