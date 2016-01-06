@@ -17,6 +17,38 @@
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
+    <script  type="text/javascript">
+        window.appRootDirName = "safe110";
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+
+        function onDeviceReady() {
+            //console.log("device is ready");
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+        }
+
+
+        function fail() {
+            console.log("failed to get filesystem");
+        }
+
+
+        function gotFS(fileSystem) {
+            //console.log("filesystem got");
+            window.fileSystem = fileSystem;
+            fileSystem.root.getDirectory(window.appRootDirName, {
+                create: true,
+                exclusive: false
+            }, dirReady, fail);
+        }
+
+
+        function dirReady(entry) {
+            window.appRootDir = entry;
+            //alert(window.appRootDir.toURL());
+        }
+
+    </script>
 </head>
 <body ng-app="starter">
     <ion-nav-bar class="bar-positive" align-title="center">
