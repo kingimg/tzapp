@@ -1,4 +1,4 @@
-﻿angular.module('starter.controllers', [])
+angular.module('starter.controllers', [])
 
 
 //angular.module('starter.controllers', []).directive('dateFormat', ['$filter', function ($filter) {
@@ -64,7 +64,7 @@
     {
         $scope.loginpictype = 0;
         makePhoto();
-    }
+    };
 
     $scope.login3 = function (user) {
         $scope.loginpictype = 1;
@@ -79,7 +79,7 @@
             }, 1000);
            
         });
-    }
+    };
 
     function onPhotoDone(imageURI) {
         uploadPhoto(imageURI);
@@ -172,8 +172,8 @@
             $scope.devices = $scope.devices.concat(data.rows);
             $scope.$broadcast("scroll.infiniteScrollComplete");           
         } else {
-            alert('登录超时，请重新登录');
-            $scope.login();
+            //alert('登录超时，请重新登录');
+            //$scope.login();
             return;
         }
     });
@@ -231,11 +231,11 @@
                         return;
                     }
                 } else {
-                    alert('登录超时，请重新登录');
-                    $scope.login();
+                    //alert('登录超时，请重新登录');
+                    //$scope.login();
                     return;
                 }
-            })
+            });
         };
         $scope.doRefresh = function () {
             $scope.$broadcast('scroll.refreshComplete');
@@ -255,8 +255,8 @@
                 $scope.machinerydetail.FactoryName = data.rows.FactoryName;
                 $scope.machinerydetail.PropertyCompanyName = data.rows.PropertyCompanyName;
             } else {
-                alert(data.msg);
-                $state.go('login');
+                //alert(data.msg);
+                //$state.go('login');
             }
         });
     })
@@ -280,8 +280,8 @@
                     return;
                 }
             } else {
-                alert('登录超时，请重新登录');
-                $scope.login();
+                //alert('登录超时，请重新登录');
+                //$scope.login();
                 return;
             }
         })
@@ -311,8 +311,8 @@
                     return;
                 }
             } else {
-                alert('登录超时，请重新登录');
-                $scope.login();
+                //alert('登录超时，请重新登录');
+                //$scope.login();
                 return;
             }
         })
@@ -379,6 +379,54 @@
     $scope.showPic = function (url) {        
         $window.open(url, '_blank', "width=100%,height=100%,resizable=1", '')
     };
+    $scope.printcheck = function () {
+        $http.post(ApiEndpoint.url + '/zaSys/printCheck/?checkID=' + $stateParams.checkId).success(function (data) {
+            if (data.success) {
+                //$ionicLoading.show({
+                //    template: '正在签名...'
+                //});
+                //$timeout(function () {
+                //    $ionicLoading.show({
+                //        template: '签名成功...'
+                //    });
+                //},1000);
+                $ionicLoading.show({
+                    template: '正在生成打印文件……'
+                });
+                $timeout(function () {
+                    $ionicLoading.show({
+                        template: '打印文件已生成！', duration: 1000
+                    });
+                }, 1000);
+                $timeout(function () {
+                    $ionicLoading.show({
+                        template: '发送打印命令……', duration: 500
+                    });
+                }, 1500);
+                $timeout(function () {
+                    $ionicLoading.show({
+                        template: '打印命令发送成功！', duration: 1000
+                    });
+                }, 2500);
+                //var extraInfo = cordova.require('cn.net.wenzhixin.cordova.ExtraInfo');
+
+                //extraInfo.getExtra(function (message) {
+                //     alert(message);
+                //}, function (message) {
+                    // alert(message);
+                //});
+            } else {
+                //alert('登录超时，请重新登录');
+                //$scope.login();
+                return;
+            }
+        })
+    };
+    $scope.printcheck2 = function () {
+        
+        window.plugins.socialsharing.shareVia('epson.print', '检查文件', 'www/res/file.pdf', 'www/res/file.pdf', null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
+
+    };
     $scope.savecheck = function () {
         if ($stateParams.operType == 'edit') {
             
@@ -386,31 +434,12 @@
             $http.post(ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
                 if (data.success) {
 
-                    //$ionicLoading.show({
-                    //    template: '正在签名...'
-                    //});
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '签名成功...'
-                    //    });
-                    //},1000);
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '正在打印...'
-                    //    });
-                    //}, 2000);
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '打印失败...', duration: 1000
-                    //    });
-                    //}, 3000);
-
                     $ionicLoading.show({
                         template: '修改成功！', duration: 1000
                     });
                 } else {
-                    alert('登录超时，请重新登录');
-                    $scope.login();
+                    //alert('登录超时，请重新登录');
+                    //$scope.login();
                     return;
                 }
             })
@@ -418,31 +447,13 @@
             var pics = getPicArr();            
             var checkdate = $filter("date")($scope.checkdetail.CheckTime, 'yyyy-MM-dd');
             $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
-                if (data.success) {
-                    //$ionicLoading.show({
-                    //    template: '正在签名...'
-                    //});
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '签名成功...'
-                    //    });
-                    //}, 1000);
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '正在打印...'
-                    //    });
-                    //}, 2000);
-                    //$timeout(function () {
-                    //    $ionicLoading.show({
-                    //        template: '打印失败...', duration: 1000
-                    //    });
-                    //}, 3000);
+                if (data.success) {                    
                     $ionicLoading.show({
                     template: '保存成功！', duration: 1000
                     });
                 } else {
-                    alert('登录超时，请重新登录');
-                    $scope.login();
+                    //alert('登录超时，请重新登录');
+                    //$scope.login();
                     return;
                 }
             })
@@ -595,7 +606,7 @@
     });
 })
 
-.controller('ctrl-account-main', function ($scope, $ionicPopup, $state, $http, ApiEndpoint) {
+.controller('ctrl-account-main', function ($scope, $ionicPopup, $state, $http, ApiEndpoint, $window) {
     $scope.showAlert = function () {
         var alertPopup = $ionicPopup.alert({
             title: '密码失效或不正确!',
@@ -622,6 +633,21 @@
                 //errCb(response);
             }
         });
+    };
+    $scope.scancheck = function () {
+        cordova.plugins.barcodeScanner.scan(
+          function (result) {
+              if (!result.cancelled)
+              {
+                  $window.open("http://tzapp.safe110.net:8085/checkresult.html?code=" + result.text, '_blank', "width=100%,height=100%,resizable=1", '');
+              }             
+          },
+          function (error) {
+              //alert("Scanning failed: " + error);
+          }
+       );
+
+       // $window.open("http://tzapp.safe110.net:8085/checkresult.html", '_blank', "width=100%,height=100%,resizable=1", '');
     };
 })
 .controller('ctrl-account-userinfo', function ($scope) {
