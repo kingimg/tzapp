@@ -438,8 +438,8 @@ angular.module('starter.controllers', [])
         //    }
         //);
         var filepath = window.appRootDir.toURL() + "1.pdf";
-        window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
-
+        //window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
+        window.plugins.socialsharing.share('检查文件', filepath, filepath);
     };
     $scope.savecheck = function () {
         if ($stateParams.operType == 'edit') {
