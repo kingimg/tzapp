@@ -49,8 +49,13 @@ angular.module('starter.controllers', [])
         //    user.password = "123456";
         ////}
         //    alert(0); return;
-            var uname = "戴峰"; var upass = "123456";
-        $http.get(ApiEndpoint.url + '/user/login/?loginName=' + uname + '&passWord=' + upass + '&r=' + Math.random()).success(function (data) {
+        //   var uname = "戴峰"; var upass = "123456";
+        
+        if (user == null)
+        {
+            user = { username: "田正霞", password: "123456" };
+        }
+        $http.get(ApiEndpoint.url + '/user/login/?loginName=' + user.username + '&passWord=' + user.password + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 window.localStorage['apikey'] = data.obj;
                 $http.defaults.headers.common['apikey'] = window.localStorage["apikey"];
