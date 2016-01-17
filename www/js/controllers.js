@@ -1,4 +1,4 @@
-﻿angular.module('starter.controllers', [])
+angular.module('starter.controllers', [])
 
 
 //angular.module('starter.controllers', []).directive('dateFormat', ['$filter', function ($filter) {
@@ -19,8 +19,8 @@
 //}])
 
 .constant('ApiEndpoint', {   
-   //url: 'http://192.168.3.63:8085'    
-    url: 'http://tzapp.safe110.net:8085'
+   url: 'http://192.168.3.63:8085'    
+    //url: 'http://tzapp.safe110.net:8085'
     //url: 'http://121.199.75.88:8085'
 })
 
@@ -638,15 +638,16 @@
             $scope.shownGroup = null;
         } else {           
             $scope.shownGroup = index;
-            if ($scope.IsLoadForMonitor && index == 3) {
-                $http.post(ApiEndpoint.url + '/monitor/getRegisterList/?r=' + Math.random()).success(function (data) {
-                    if (data.success) {
-                        $scope.devices = $scope.devices.concat(data.rows);
-                        $scope.IsLoadForMonitor = false;
-                    }
-                })
-            } else if ($scope.IsLoadForCheck && index == 5) {
-                $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=1&rows=10000&proid=' + $stateParams.proId + '&checkType=2&r=' + Math.random()).success(function (data) {
+            //if ($scope.IsLoadForMonitor && index == 3) {
+            //    $http.post(ApiEndpoint.url + '/monitor/getRegisterList/?r=' + Math.random()).success(function (data) {
+            //        if (data.success) {
+            //            $scope.devices = $scope.devices.concat(data.rows);
+            //            $scope.IsLoadForMonitor = false;
+            //        }
+            //    })
+            //} else
+                if ($scope.IsLoadForCheck && index == 5) {
+                $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=1&rows=10000&proid=' + $stateParams.proId + '&checkType=3&r=' + Math.random()).success(function (data) {
                     if (data.success) {
                         $scope.checks = $scope.checks.concat(data.rows);
                         $scope.IsLoadForCheck = false;                        

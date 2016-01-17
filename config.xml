@@ -45,7 +45,7 @@
   <icon src="www/res/icons/webos/icon-64.png" gap:platform="webos" />
   <icon src="www/res/icons/windows-phone/icon-48.png" gap:platform="winphone" />
   <icon src="www/res/icons/windows-phone/icon-173-tile.png" gap:platform="winphone" gap:role="background" />
-  <gap:splash src="www/res/screens/welcome.png" />
+  <splash src="www/res/screens/welcome.png" />
   <!--<gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-ldpi"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-mdpi"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-hdpi"/>
