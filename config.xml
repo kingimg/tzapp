@@ -15,7 +15,7 @@
   <preference name="detect-data-types" value="true" />
   <preference name="exit-on-suspend" value="false" />
   <preference name="show-splash-screen-spinner" value="true" />
-  <preference name="auto-hide-splash-screen" value="false" />
+  <preference name="auto-hide-splash-screen" value="true" />
   <preference name="disable-cursor" value="false" />
   <preference name="android-minSdkVersion" value="7" />
   <preference name="android-installLocation" value="auto" />
@@ -45,7 +45,7 @@
   <icon src="www/res/icons/webos/icon-64.png" gap:platform="webos" />
   <icon src="www/res/icons/windows-phone/icon-48.png" gap:platform="winphone" />
   <icon src="www/res/icons/windows-phone/icon-173-tile.png" gap:platform="winphone" gap:role="background" />
-  <splash src="www/res/screens/welcome.png" />
+  <splash src="splash.png" />
   <!--<gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-ldpi"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-mdpi"/>
   <gap:splash src="res/screens/welcome.png" gap:platform="android" gap:qualifier="port-hdpi"/>
