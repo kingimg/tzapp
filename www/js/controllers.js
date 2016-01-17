@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+﻿angular.module('starter.controllers', [])
 
 
 //angular.module('starter.controllers', []).directive('dateFormat', ['$filter', function ($filter) {
@@ -32,7 +32,13 @@ angular.module('starter.controllers', [])
     //        //$state.go('menus.home');
     //        $state.go('menus.monitor-main');
     //    }
-    //};
+    //};    
+    $scope.user = {}; 
+    if (window.localStorage['savepass'] == "true") {
+        $scope.user.username = window.localStorage['loginname'];
+        $scope.user.password = window.localStorage['password'];
+        $scope.user.savepass = true;
+    }
     $scope.showAlert = function () {
         var alertPopup = $ionicPopup.alert({
             title: '密码失效或不正确!',
@@ -51,13 +57,30 @@ angular.module('starter.controllers', [])
         //    alert(0); return;
         //   var uname = "戴峰"; var upass = "123456";
         
-        if (user == null)
-        {
-            user = { username: "田正霞", password: "123456" };
-        }
+        if (user == null) 
+            return;
+        else if (user.username == null)
+            return;
+        else if (user.password == null)
+            return;
+        else if (user.username == "")
+            return;
+        else if (user.password == "")
+            return;
         $http.get(ApiEndpoint.url + '/user/login/?loginName=' + user.username + '&passWord=' + user.password + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 window.localStorage['apikey'] = data.obj;
+                if (user.savepass === true) {
+                    window.localStorage['loginname'] = user.username;
+                    window.localStorage['password'] = user.password;
+                    window.localStorage['savepass'] = user.savepass;
+                }
+                else
+                {
+                    window.localStorage.removeItem("loginname");
+                    window.localStorage.removeItem("password");
+                    window.localStorage.removeItem("savepass");
+                }
                 $http.defaults.headers.common['apikey'] = window.localStorage["apikey"];
                 //$state.go('menus.home');
                 $state.go('menus.check-projects');
@@ -299,7 +322,25 @@ angular.module('starter.controllers', [])
     };
     //$scope.moreDataCanBeLoaded = function () { return CheckProjects.hasmore; };
     $scope.doRefresh = function () {
-        $scope.$broadcast('scroll.refreshComplete');
+        $scope.page = 1;
+        $scope.page_count = 1;
+        $scope.load_over = true;
+        $http.post(ApiEndpoint.url + '/zaSys/checkProList/?page=' + $scope.page + '&r=' + Math.random()).success(function (data) {
+            if (data.success) {
+                $scope.page_count = data.total;
+                $scope.projects = data.rows;
+                $scope.page++;
+                $scope.$broadcast("scroll.refreshComplete");
+                if ($scope.page > $scope.page_count) {
+                    $scope.load_over = false;
+                    return;
+                }
+            } else {
+                //alert('登录超时，请重新登录');
+                //$scope.login();
+                return;
+            }
+        })
     };
 })
 
@@ -310,7 +351,7 @@ angular.module('starter.controllers', [])
     $scope.load_over = true;
     var proName,checkUser;
     $scope.loadMore = function () {
-        $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=' + $scope.page + '&proid=' + $stateParams.proId + '&checkType=0,1,6&r=' + Math.random()).success(function (data) {
+        $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=' + $scope.page + '&proid=' + $stateParams.proId + '&checkType=0,1&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 $scope.page_count = data.total;
                 $scope.checks = $scope.checks.concat(data.rows);
@@ -329,13 +370,32 @@ angular.module('starter.controllers', [])
         })
     };
     $scope.doRefresh = function () {
-        $scope.$broadcast('scroll.refreshComplete');
+        $scope.page = 1;
+        $scope.page_count = 1;
+        $scope.load_over = true;
+        $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=' + $scope.page + '&proid=' + $stateParams.proId + '&checkType=0,1&r=' + Math.random()).success(function (data) {
+            if (data.success) {
+                $scope.page_count = data.total;
+                $scope.checks = data.rows;
+                if (data.rows.length > 0) { proName = data.rows[0].ProName; checkUser = data.rows[0].CheckUser; }
+                $scope.page++;
+                $scope.$broadcast("scroll.refreshComplete");
+                if ($scope.page > $scope.page_count) {
+                    $scope.load_over = false;
+                    return;
+                }
+            } else {
+                //alert('登录超时，请重新登录');
+                //$scope.login();
+                return;
+            }
+        })
     };
     $scope.addnew = function () {
         $state.go("menus.check-checkadd", { operType: 'add', proId: $stateParams.proId, proName: proName, checkUser: checkUser });
     };
 })
-.controller('ctrl-check-checkdetail', function ($scope, $stateParams, $window, $http, $ionicActionSheet, $filter, ApiEndpoint, $ionicLoading, $timeout) {
+.controller('ctrl-check-checkdetail', function ($scope, $stateParams, $window, $http, $ionicActionSheet, $filter, ApiEndpoint, $ionicLoading, $timeout, $state) {
     $scope.checkdetail = {};
     $scope.photos = [];
     $scope.isedit = $stateParams.operType == 'edit';
@@ -362,7 +422,7 @@ angular.module('starter.controllers', [])
             } else {
                 //alert('登录超时，请重新登录');
                 //$scope.login();
-                alert(data);
+                //alert(data);
                 return;
             }
         })
@@ -478,6 +538,7 @@ angular.module('starter.controllers', [])
                     $ionicLoading.show({
                     template: '保存成功！', duration: 1000
                     });
+                    $state.go("menus.check-checks", { proId: $stateParams.proId });
                 } else {
                     //alert('登录超时，请重新登录');
                     //$scope.login();
