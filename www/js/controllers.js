@@ -407,7 +407,10 @@ angular.module('starter.controllers', [])
                 $scope.checkdetail.CheckMode = data.rows[0].CheckMode;
                 $scope.checkdetail.CheckTime = $filter("date")(data.rows[0].CheckTime.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//'2011-11-11';//data.rows[0].CheckTime.replace(/\D/igm, "").trim();
                 $scope.checkdetail.CheckUser = data.rows[0].CheckUser;
-                $scope.checkdetail.Content1 = data.rows[0].F1;
+                if (data.rows[0].CheckMode == 41)
+                    $scope.checkdetail.Content1 = data.rows[0].Content3;
+                else
+                    $scope.checkdetail.Content1 = data.rows[0].F1;
                 $scope.checkdetail.WebApiUrl = ApiEndpoint.url;
                 //alert($scope.checkdetail.CheckTime);
                 //alert(data.obj);
