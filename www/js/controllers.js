@@ -19,8 +19,8 @@ angular.module('starter.controllers', [])
 //}])
 
 .constant('ApiEndpoint', {   
-    //url: 'http://192.168.3.63:8085'    
-   url: 'http://tzapp.safe110.net:8085'
+    url: 'http://192.168.3.63:8085'    
+   //url: 'http://tzapp.safe110.net:8085'
     //url: 'http://121.199.75.88:8085'
 })
 
@@ -39,10 +39,10 @@ angular.module('starter.controllers', [])
         $scope.user.password = window.localStorage['password'];
         $scope.user.savepass = true;
     }
-    $scope.showAlert = function () {
+    $scope.showAlert = function (msg) {
         var alertPopup = $ionicPopup.alert({
-            title: '密码失效或不正确!',
-            template: '密码失效或不正确!'
+            title: '登录失败',
+            template: msg
         });
         alertPopup.then(function (res) {
             //console.log('Thank you for not eating my delicious ice cream cone');
@@ -85,7 +85,7 @@ angular.module('starter.controllers', [])
                 //$state.go('menus.home');
                 $state.go('menus.check-projects');
             } else {
-                $scope.showAlert();
+                $scope.showAlert(data.msg);
             }
         }).error(function (response) {
             if (errCb && typeof errCb === 'function') {
