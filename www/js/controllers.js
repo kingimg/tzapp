@@ -19,8 +19,8 @@ angular.module('starter.controllers', [])
 //}])
 
 .constant('ApiEndpoint', {   
-    //url: 'http://192.168.3.63:8085'    
-   url: 'http://tzapp.safe110.net:8085'
+    url: 'http://192.168.3.63:8085'    
+   //url: 'http://tzapp.safe110.net:8085'
     //url: 'http://121.199.75.88:8085'
 })
 
@@ -93,7 +93,9 @@ angular.module('starter.controllers', [])
             }
         });
     };
-
+    $scope.maptest = function () {
+        $state.go('menus.projectmap');
+    }
     $scope.login2 = function(user)
     {
         $scope.loginpictype = 0;
@@ -167,6 +169,186 @@ angular.module('starter.controllers', [])
 })
 .controller('ctrl-home', function ($scope) {
 
+})
+.controller('ctrl-projectmap', function ($scope, $http, $state, ApiEndpoint, $window) {
+    $scope.address = "天堂软件园";
+    $scope.boxheight = $window.innerHeight - 50;
+})
+.controller('ctrl-daily-main', function ($scope, $http, $state, ApiEndpoint) {
+    $scope.waitdolist = [];
+    $scope.waitlistpage = 1;
+    $scope.waitlistpage_count = 1;
+    $scope.load_waitlist_over = true;
+    $scope.loadWaitListMore = function () {
+        $http.post(ApiEndpoint.url + '/zaSys/getWaitDoList/?page=' + $scope.waitlistpage + '&r=' + Math.random()).success(function (data) {
+            if (data.success) {
+                $scope.waitlistpage_count = data.total;
+                $scope.waitdolist = $scope.waitdolist.concat(data.rows);
+                $scope.waitlistpage++;
+                $scope.$broadcast("scroll.infiniteScrollComplete");
+                if ($scope.waitlistpage > $scope.waitlistpage_count) {
+                    $scope.load_waitlist_over = false;
+                    return;
+                }
+            } else {
+                //alert('登录超时，请重新登录');
+                //$scope.login();
+                return;
+            }
+        });
+    };
+    $scope.doWaitListRefresh = function () {
+        $scope.$broadcast('scroll.refreshComplete');
+    };  
+})
+.controller('ctrl-daily-notice', function ($scope, $http, $state, ApiEndpoint) {
+    $scope.noticelist = [];
+    $scope.noticelistpage = 1;
+    $scope.noticelistpage_count = 1;
+    $scope.load_noticelist_over = true;
+    $scope.loadNoticeListMore = function () {
+        $http.post(ApiEndpoint.url + '/zaSys/getDailyList/?classid=1&page=' + $scope.noticelistpage + '&r=' + Math.random()).success(function (data) {
+            if (data.success) {
+                $scope.noticelistpage_count = data.total;
+                $scope.noticelist = $scope.noticelist.concat(data.rows);
+                $scope.noticelistpage++;
+                $scope.$broadcast("scroll.infiniteScrollComplete");
+                if ($scope.noticelistpage > $scope.noticelistpage_count) {
+                    $scope.load_noticelist_over = false;
+                    return;
+                }
+            } else {
+                //alert('登录超时，请重新登录');
+                //$scope.login();
+                return;
+            }
+        });
+    };
+    $scope.doNoticeListRefresh = function () {
+        $scope.$broadcast('scroll.refreshComplete');
+    };
+})
+.controller('ctrl-daily-standard', function ($scope, $http, $state, ApiEndpoint) {
+    $scope.standardlist = [];
+    $scope.standardlistpage = 1;
+    $scope.standardlistpage_count = 1;
+    $scope.load_standardlist_over = true;
+    $scope.loadStandardListMore = function () {
+        $http.post(ApiEndpoint.url + '/zaSys/getDailyList/?classid=3&page=' + $scope.standardlistpage + '&r=' + Math.random()).success(function (data) {
+            if (data.success) {
+                $scope.standardlistpage_count = data.total;
+                $scope.standardlist = $scope.standardlist.concat(data.rows);
+                $scope.standardlistpage++;
+                $scope.$broadcast("scroll.infiniteScrollComplete");
+                if ($scope.standardlistpage > $scope.standardlistpage_count) {
+                    $scope.load_standardlist_over = false;
+                    return;
+                }
+            } else {
+                //alert('登录超时，请重新登录');
+                //$scope.login();
+                return;
+            }
+        });
+    };
+    $scope.doStandardListRefresh = function () {
+        $scope.$broadcast('scroll.refreshComplete');
+    };
+})
+.controller('ctrl-daily-info', function ($scope, $stateParams, $http, $state, ApiEndpoint) {    
+    $scope.dailyInfoData = {}; 
+    $http.post(ApiEndpoint.url + '/zaSys/getDailyInfo?newId=' + $stateParams.Id + '&r=' + Math.random()).success(function (data) {
+        if (data.success) {
+            $scope.dailyInfoData.InfoTitle = data.obj.InfoTitle;
+            $scope.dailyInfoData.InfoContent = data.obj.InfoContent;
+        }
+    });
+})
+.controller('ctrl-daily-waitdo', function ($scope, $stateParams, $http,$filter, $state, ApiEndpoint, $ionicPopup) {
+    $scope.dailyWaitDoData = {}; var template, tempurl;
+    $scope.dailyWaitDoData.Type = $stateParams.type;
+
+    var comFun = function (flag) {
+        switch ($scope.dailyWaitDoData.Type) {
+            case '6': tempurl = '/zaSys/replyCheck?r='; if (flag) { $scope.dailyWaitDoData.DoReplyContent = '通过'; } else { $scope.dailyWaitDoData.DoReplyContent = '不通过'; } template = '<textarea  rows="5" placeholder="复查内容" ng-model="dailyWaitDoData.Content4"></textarea>'; break;
+            case '7': tempurl = '/zaSys/sendCheck?r='; if (flag) { $scope.dailyWaitDoData.Status = '1'; } else { $scope.dailyWaitDoData.Status = '0'; } template = '<textarea  rows="5" placeholder="停工整改内容" ng-model="dailyWaitDoData.Content2"></textarea>'; break;
+            case '8': tempurl = '/zaSys/replyCheck?r='; if (flag) { $scope.dailyWaitDoData.DoReplyContent = '通过'; } else { $scope.dailyWaitDoData.DoReplyContent = '不通过'; } template = '<textarea  rows="5" placeholder="复查内容" ng-model="dailyWaitDoData.Content4"></textarea>'; break;
+            case '9': tempurl = '/zaSys/finishCheck?r='; if (flag) { $scope.dailyWaitDoData.DoReplyContent2 = '通过'; } else { $scope.dailyWaitDoData.DoReplyContent2 = '不通过'; } template = '<textarea  rows="5" placeholder="复工内容" ng-model="dailyWaitDoData.F2"></textarea>'; break;
+        }
+    };
+
+    $scope.through = function () {
+        comFun(true);
+        $http.post(ApiEndpoint.url + tempurl + Math.random(), $scope.dailyWaitDoData).success(function (data) {
+            if (data.success) {
+                $state.go('menus.daily-main',null, { reload: true });
+            }
+        });
+        return true;
+    };
+        
+    $scope.showPopup = function() {
+        comFun(false);
+        var myPopup = $ionicPopup.show({
+            template: template,
+            title: '输入原因',            
+            scope: $scope,
+            buttons: [
+              { text: '取消' },
+              {
+                  text: '<b>保存</b>',
+                  type: 'button-positive',
+                  onTap: function (e) {                      
+                      $http.post(ApiEndpoint.url + tempurl + Math.random(), $scope.dailyWaitDoData).success(function (data) {
+                          if (data.success) {                             
+                              $state.go('menus.daily-main', null, { reload: true });
+                          }                         
+                      });
+                  }
+              },
+            ]
+        });
+        myPopup.then(function(res) {
+            console.log('Tapped!', res);
+        });        
+    };
+    $scope.showPic = function (url) {
+        $window.open(url, '_blank', "width=100%,height=100%,resizable=1", '')
+    };
+    $http.post(ApiEndpoint.url + '/zaSys/viewWaitDoDetail?noticeId=' + $stateParams.noticeId + '&replyId=' + $stateParams.replyId + '&r=' + Math.random()).success(function (data) {
+        if (data.success) {
+            //通知书主题信息
+            $scope.dailyWaitDoData.WebApiUrl = ApiEndpoint.url;
+            $scope.dailyWaitDoData.NoticeID = data.obj.NoticeID;//通知书ID
+            $scope.dailyWaitDoData.NoticeType = data.obj.NoticeType;//通知书类型
+            $scope.dailyWaitDoData.ReplyID = data.obj.ReplyID;//回复ID
+            $scope.dailyWaitDoData.CheckUser = data.obj.CheckUser;//检查人员
+            $scope.dailyWaitDoData.CheckTime = $filter("date")(data.obj.CheckTime.replace(/\D/igm, "").trim(), 'yyyy-MM-dd'); //检查日期
+            $scope.dailyWaitDoData.MaxDoDate = $filter("date")(data.obj.MaxDoDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');
+            $scope.dailyWaitDoData.NoticeGrantUser = data.obj.NoticeGrantUser;//站长
+            $scope.dailyWaitDoData.NoticeGrantDate = $filter("date")(data.obj.NoticeGrantDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//站长发放日期
+            $scope.dailyWaitDoData.Content2 = data.obj.Content2;//站长发放原因
+            $scope.dailyWaitDoData.ReplyCompanyName = data.obj.ReplyCompanyName;//整改单位
+            $scope.dailyWaitDoData.ReplyDate = $filter("date")(data.obj.ReplyDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//整改时间
+            $scope.dailyWaitDoData.ReplyContent = data.obj.ReplyContent;//整改情况描述
+            $scope.dailyWaitDoData.FirstCheckUser = data.obj.FirstCheckUser;//监理单位审查人员
+            $scope.dailyWaitDoData.FirstCheckDate = $filter("date")(data.obj.FirstCheckDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');
+            $scope.dailyWaitDoData.Content3 = data.obj.Content3;//监理单位审核原因
+            $scope.dailyWaitDoData.ReCheckPerson = data.obj.ReCheckPerson;//复查人员
+            $scope.dailyWaitDoData.ReCheckDate = $filter("date")(data.obj.ReCheckDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//复查时间
+            $scope.dailyWaitDoData.DoReplyContent = data.obj.DoReplyContent;//复查结论
+            $scope.dailyWaitDoData.Content4 = data.obj.Content4;//复查原因
+            $scope.dailyWaitDoData.BackWorkUser = data.obj.BackWorkUser;//复工人员
+            $scope.dailyWaitDoData.BackWorkDate = $filter("date")(data.obj.BackWorkDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//复工时间
+            $scope.dailyWaitDoData.DoReplyContent2 = data.obj.DoReplyContent2;//复工结论
+            $scope.dailyWaitDoData.F2 = data.obj.F2;//复工原因
+            $scope.dailyWaitDoData.NoticeContent = data.obj.NoticeContent;
+            if ($stateParams.replyId != null) {
+                $scope.dailyWaitDoData.Attachments = data.rows[0].rows;//通知书图片
+                $scope.dailyWaitDoData.AttachmentsReply = data.rows[1].rows;//通知书整改图片    
+            } else { $scope.dailyWaitDoData.Attachments = data.rows }                    
+        }
+    });
 })
 .controller('ctrl-monitor-main', function ($scope, $http, $state, ApiEndpoint) {
     $scope.homeData = {};
@@ -421,7 +603,21 @@ angular.module('starter.controllers', [])
                         data.obj[i].PicPath_s = ApiEndpoint.url + data.obj[i].PicPath_s
                     }
                     $scope.photos = $scope.photos.concat(data.obj);
-                }
+                } 
+                if(data.children)
+                {
+                    var notice = data.children[0].obj;
+                    $scope.checkdetail.hasnotice = true;
+                    $scope.checkdetail.NoticeType = notice.NoticeType;
+                    $scope.checkdetail.NoticeNo = notice.NoticeNo;
+                    $scope.checkdetail.StopPart = notice.StopPart;
+                    $scope.checkdetail.GrantObject1 = ((notice.GrantObject & 1) == 1);
+                    $scope.checkdetail.GrantObject2 = ((notice.GrantObject & 2) == 2);
+                    $scope.checkdetail.GrantObject3 = ((notice.GrantObject & 4) == 4);
+                    $scope.checkdetail.NoticeContent1 = notice.Content1;
+                    $scope.checkdetail.GrantDate = $filter("date")(notice.GrantDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');
+                    $scope.checkdetail.MaxDoDate = $filter("date")(notice.MaxDoDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');
+                }                
             } else {
                 //alert('登录超时，请重新登录');
                 //$scope.login();
@@ -519,11 +715,24 @@ angular.module('starter.controllers', [])
     };
     $scope.savecheck = function () {
         if ($stateParams.operType == 'edit') {
-            
-            var pics = getPicArr();            
-            $http.post(ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
+            if (!checkForm())
+                return;
+            var pics = getPicArr();
+            var poststr = ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics;
+            poststr += '&hasnotice=' + $scope.checkdetail.hasnotice;
+            if ($scope.checkdetail.hasnotice)
+            {
+                poststr += '&NoticeType=' + $scope.checkdetail.NoticeType;
+                poststr += '&NoticeNo=' + $scope.checkdetail.NoticeNo;
+                poststr += '&StopPart=' + ($scope.checkdetail.StopPart?$scope.checkdetail.StopPart:"");
+                poststr += '&GrantObject=' + (($scope.checkdetail.GrantObject1?1:0)|($scope.checkdetail.GrantObject2?2:0)|($scope.checkdetail.GrantObject3?4:0));
+                poststr += '&NoticeContent1=' + ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : "");
+                poststr += '&GrantDate=' + $scope.checkdetail.GrantDate;
+                poststr += '&MaxDoDate=' + $scope.checkdetail.MaxDoDate;
+            }
+            poststr += '&r=' + Math.random();
+            $http.post(poststr).success(function (data) {
                 if (data.success) {
-
                     $ionicLoading.show({
                         template: '修改成功！', duration: 1000
                     });
@@ -534,9 +743,22 @@ angular.module('starter.controllers', [])
                 }
             })
         } else if ($stateParams.operType == 'add') {
+            if (!checkForm())
+                return;
             var pics = getPicArr();            
             var checkdate = $filter("date")($scope.checkdetail.CheckTime, 'yyyy-MM-dd');
-            $http.post(ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random()).success(function (data) {
+            var poststr = ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random();
+            poststr += '&hasnotice=' + $scope.checkdetail.hasnotice;
+            if ($scope.checkdetail.hasnotice) {
+                poststr += '&NoticeType=' + $scope.checkdetail.NoticeType;
+                poststr += '&NoticeNo=' + $scope.checkdetail.NoticeNo;
+                poststr += '&StopPart=' + ($scope.checkdetail.StopPart ? $scope.checkdetail.StopPart : "");
+                poststr += '&GrantObject=' + (($scope.checkdetail.GrantObject1 ? 1 : 0) | ($scope.checkdetail.GrantObject2 ? 2 : 0) | ($scope.checkdetail.GrantObject3 ? 4 : 0));
+                poststr += '&NoticeContent1=' + $scope.checkdetail.NoticeContent1;
+                poststr += '&GrantDate=' + $filter("date")($scope.checkdetail.GrantDate, 'yyyy-MM-dd');
+                poststr += '&MaxDoDate=' + $filter("date")($scope.checkdetail.MaxDoDate, 'yyyy-MM-dd');
+            }
+            $http.post(poststr).success(function (data) {
                 if (data.success) {                    
                     $ionicLoading.show({
                     template: '保存成功！', duration: 1000
@@ -550,6 +772,74 @@ angular.module('starter.controllers', [])
             })
         }
     };
+    function checkForm()
+    {
+        if(!$scope.checkdetail.CheckType)
+        {
+            $ionicLoading.show({
+                template: '请选择检查类型！', duration: 1000
+            });
+            return false;
+        } else if (!$scope.checkdetail.CheckTime)
+        {
+            $ionicLoading.show({
+                template: '检查日期不能为空！', duration: 1000
+            });
+            return false;
+        } else if (!$scope.checkdetail.CheckUser || ($scope.checkdetail.CheckUser && ($scope.checkdetail.CheckUser == null || $scope.checkdetail.CheckUser == "")))
+        {
+            $ionicLoading.show({
+                template: '监督员不能为空！', duration: 1000
+            });
+            return false;
+        } else if (!$scope.checkdetail.Content1 || ($scope.checkdetail.Content1 && ($scope.checkdetail.Content1 == null || $scope.checkdetail.Content1 == "")))
+        {
+            $ionicLoading.show({
+                template: '检查内容不能为空！', duration: 1000
+            });
+            return false;
+        }
+        else if ($scope.checkdetail.hasnotice) {
+            if (!$scope.checkdetail.NoticeType) {
+                $ionicLoading.show({
+                    template: '请选择通知书类型！', duration: 1000
+                });
+                return false;
+            } else if (!$scope.checkdetail.NoticeNo || ($scope.checkdetail.NoticeNo && ($scope.checkdetail.NoticeNo == null || $scope.checkdetail.NoticeNo == ""))) {
+                $ionicLoading.show({
+                    template: '通知书编号不能为空！', duration: 1000
+                });
+                return false;
+            } else if (($scope.checkdetail.NoticeType == 2 || $scope.checkdetail.NoticeType == 5) && (!$scope.checkdetail.StopPart || ($scope.checkdetail.StopPart && ($scope.checkdetail.StopPart == null || $scope.checkdetail.StopPart == "")))) {
+                $ionicLoading.show({
+                    template: '整改部位不能为空！', duration: 1000
+                });
+                return false;
+            } else if (!$scope.checkdetail.GrantObject1 && !$scope.checkdetail.GrantObject2 && !$scope.checkdetail.GrantObject3) {
+                $ionicLoading.show({
+                    template: '通知书发放对象至少要选择一个！', duration: 1000
+                });
+                return false;
+            } else if (!$scope.checkdetail.NoticeContent1) {
+                $ionicLoading.show({
+                    template: '通知书内容不能为空！', duration: 1000
+                });
+                return false;
+            }  else if (!$scope.checkdetail.GrantDate) {
+                $ionicLoading.show({
+                    template: '通知书发放日期不能为空！', duration: 1000
+                });
+                return false;
+            } else if (!$scope.checkdetail.MaxDoDate) {
+                $ionicLoading.show({
+                    template: '通知书最迟整改日期不能为空！', duration: 1000
+                });
+                return false;
+            }
+
+        }
+        return true;
+    }
     function onPhotoDone(imageURI) { 
         uploadPhoto(imageURI); //alert(imageURI);
     }

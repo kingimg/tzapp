@@ -42,7 +42,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 default: return val; break;
             }
         }
-    })
+})
+.filter('noticeType', function () {
+    return function (val) {
+        switch (val) {
+            case 1: return "安全隐患整改"; break;
+            case 2: return "安全局部停工整改"; break;
+            case 3: return "安全全面停工整改"; break;
+            case 4: return "质量隐患整改"; break;
+            case 5: return "质量局部停工整改"; break;
+            case 6: return "质量全面停工整改"; break;
+            default: return val; break;
+        }
+    }
+})
 .filter('machineIconTran', function () {
     return function (val, action) {
         if (action == 1) {
@@ -59,6 +72,43 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             }
         }
     }
+})
+.directive("appMap", function () {
+    return {
+        restrict: "E",
+        replace: true,
+        template: "<div id='allMap'></div>",
+        scope: {
+            center: "=",		// Center point on the map (e.g. <code>{ latitude: 10, longitude: 10 }</code>).
+            markers: "=",	   // Array of map markers (e.g. <code>[{ lat: 10, lon: 10, name: "hello" }]</code>).
+            width: "@",		 // Map width in pixels.
+            height: "@",		// Map height in pixels.
+            zoom: "@",		  // Zoom level (one is totally zoomed out, 25 is very much zoomed in).
+            zoomControl: "@",   // Whether to show a zoom control on the map.
+            scaleControl: "@",   // Whether to show scale control on the map.
+            address:"@"
+        },
+        link: function (scope, element, attrs) {
+            var map;
+            // 百度地图API功能
+            map = new BMap.Map("allMap");
+            map.centerAndZoom(new BMap.Point(scope.center.latitude, scope.center.longitude), scope.zoom);
+            //var local = new BMap.LocalSearch(map, {
+            //    renderOptions: { map: map, autoViewport: true }
+            //});
+            //local.searchNearby("小吃", "前门");
+            //map.addControl(new BMap.ZoomControl());
+            //// 创建地址解析器实例
+            //var myGeo = new BMap.Geocoder();
+            //// 将地址解析结果显示在地图上,并调整地图视野
+            //myGeo.getPoint(scope.address, function(point){
+            //    if (point) {
+            //        map.centerAndZoom(point, 16);
+            //        map.addOverlay(new BMap.Marker(point));
+            //    }
+            //}, "");
+        }
+    };
 })
 .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $httpProvider) {
     $httpProvider.defaults.headers.common['apikey'] = window.localStorage["apikey"];
@@ -77,6 +127,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('login', { url: "/login", templateUrl: "templates/login.html", controller: 'ctrl-login' })   
     .state('menus.home', { views: { 'menus-home': { templateUrl: 'templates/home.html', controller: 'ctrl-home' } }, url: '/home' })
 
+    .state('menus.projectmap', { views: { 'menus-board': { templateUrl: 'templates/common/project_map.html', controller: 'ctrl-projectmap' } }, url: '/common/projectmap' })
+
     .state('menus.monitor-main', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/main.html', controller: 'ctrl-monitor-main' } },url: '/monitor/main' })
     .state('menus.monitor-device', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/devices.html', controller: 'ctrl-monitor-devices' } }, url: '/monitor/devices/:monitorType/:monitorStatus' })
     .state('menus.monitor-device-detail', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/device-detail.html', controller: 'ctrl-monitor-devicedetail' } }, url: '/monitor/device/:deviceSN/:monitorType' })
@@ -91,6 +143,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     .state('menus.monitor-machinerys', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/machinerys.html', controller: 'ctrl-monitor-machinerys' } }, url: '/monitor/machinerys/:machinerysType' })
     .state('menus.monitor-machinery-detail', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/machinery-detail.html', controller: 'ctrl-monitor-machinerydetail' } }, url: '/monitor/machinerydetail/:baId' })
+    
+    .state('menus.daily-main', { views: { 'menus-daily': { templateUrl: 'templates/daily/main.html', controller: 'ctrl-daily-main' } }, cache: false , url: '/daily/main' })
+    .state('menus.daily-info', { views: { 'menus-daily': { templateUrl: 'templates/daily/daily-info.html', controller: 'ctrl-daily-info' } }, url: '/daily/info/:Id' })
+    .state('menus.daily-waitdo', { views: { 'menus-daily': { templateUrl: 'templates/daily/daily-waitdo.html', controller: 'ctrl-daily-waitdo' } }, url: '/daily/waitdo/:noticeId/:replyId/:type' })
 
     .state('menus.check-projects', { views: { 'menus-check': { templateUrl: 'templates/check/projects.html', controller: 'ctrl-check-projects' } }, url: '/check/projects' })
     .state('menus.check-checks', { views: { 'menus-check': { templateUrl: 'templates/check/checks.html', controller: 'ctrl-check-checks' } }, url: '/check/projectchecks/:proId' })
