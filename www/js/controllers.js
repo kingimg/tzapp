@@ -898,6 +898,12 @@ angular.module('starter.controllers', [])
         $http.post(ApiEndpoint.url + '/zaSys/checkProList/?page=' + $scope.page + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 $scope.page_count = data.total;
+                angular.forEach(data.rows, function (row) {
+                    if (row.closeNum == 0)
+                        row.badgestyle = "badge-balanced"; 
+                    else
+                        row.badgestyle = "badge-assertive";
+                });
                 $scope.projects = $scope.projects.concat(data.rows);
                 $scope.page++;
                 $scope.$broadcast("scroll.infiniteScrollComplete");
