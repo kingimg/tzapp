@@ -1,0 +1,25 @@
+﻿<ion-view view-title="项目看板">
+  <ion-content has-bouncing="true">
+      <ion-refresher pulling-text="下拉刷新"
+                     refreshing-text="刷新成功"
+                     refreshing-icon="ion-loading-c"
+                     on-refresh="doRefresh()">
+      </ion-refresher>
+      <div class="list card prolist" ng-repeat="project in projects">
+          <div class="item item-divider item-btitle protop">A20131134054<!--<span class="item-note">最近检查：{{project.LastCheckTime | brDateFilter}}</span>-->
+              <span class="badge {{project.badgestyle}}" style="right:5px;">通知书{{project.LastNoticeInfo}} 未闭合：{{project.closeNum}}</span>
+          </div>
+          <a class="item item-body" href="#/menus/board/projects/{{project.ProID}}">
+              <h2>
+                 {{project.ProName}}
+              </h2>
+              <div class="prodes"> 
+                  施工单位：{{project.ShigongUnitName}}
+              </div>
+          </a>
+      </div>
+      <ion-infinite-scroll ng-if="load_over" on-infinite="loadMore()"
+                           distance="1%">
+      </ion-infinite-scroll>
+  </ion-content>
+</ion-view>
