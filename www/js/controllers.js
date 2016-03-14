@@ -264,7 +264,7 @@ angular.module('starter.controllers', [])
 .controller('ctrl-daily-info', function ($scope, $stateParams, $http, $state, ApiEndpoint) {    
     $scope.dailyInfoData = {}; 
     $http.post(ApiEndpoint.url + '/zaSys/getDailyInfo?newId=' + $stateParams.Id + '&r=' + Math.random()).success(function (data) {
-        if (data.success) {
+        if (data.success) {    
             $scope.dailyInfoData.InfoTitle = data.obj.InfoTitle;
             $scope.dailyInfoData.InfoContent = data.obj.InfoContent;
         }

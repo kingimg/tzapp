@@ -1,5 +1,5 @@
-﻿<ion-view view-title="{{project.proname}}">
-  <ion-content class="padding" has-bouncing="true">
+﻿<ion-view view-title="工程详情"> 
+  <ion-content class="padding" has-bouncing="true">       
       <ion-list class="xmkb">          
           <!--begin 工程基本情况-->
           <div class="item-box">
@@ -10,7 +10,10 @@
                   &nbsp;
                   工程基本情况
               </ion-item>
-
+              <ion-item class="item-accordion" ng-show="isGroupShown(1)">
+                  工程名称：
+                  <span class="item-note">{{projectDetail.ProName}}</span>
+              </ion-item>
               <ion-item class="item-accordion" ng-show="isGroupShown(1)">
                   监督注册号：
                   <span class="item-note">{{projectDetail.RegNumber}}</span>
@@ -42,10 +45,10 @@
                   交底日期：<span class="item-note">{{projectDetail.JiaoDiDate | brDateFilter}}</span>
               </ion-item>
               <ion-item class="item-accordion" ng-show="isGroupShown(2)">
-                  执行检查：<span class="item-note">{{projectDetail.CheckCount}}次</span>
+                  安全检查：<span class="item-note">{{projectDetail.CheckCount}}次</span>
               </ion-item>
               <ion-item class="item-accordion" ng-show="isGroupShown(2)">
-                  执行巡查：<span class="item-note">{{projectDetail.CheckCount1}}次</span>
+                  质量检查：<span class="item-note">{{projectDetail.CheckCount1}}次</span>
               </ion-item>
               <ion-item class="item-accordion" ng-show="isGroupShown(2)">
                   发放通知书：<span class="item-note">{{projectDetail.noticeNum}}份</span>
@@ -172,9 +175,9 @@
                   &nbsp;
                   工程人员信息
               </ion-item>
-              <a class="item item-accordion" href="#" ng-show="isGroupShown(6)" ng-repeat="person in persons">
+              <a class="item item-accordion" href="#/menus/common/properson/{{person.PPersonID}}" ng-show="isGroupShown(6)" ng-repeat="person in persons">
                   {{person.PersonTypeName}}
-                  <span class="item-note">{{person.TrueName}}</span>
+                  <span class="item-note">{{person.TrueName}} {{person.Phone}}</span>
               </a> 
             <!--  <a class="item item-accordion" href="#" ng-show="isGroupShown(6)">
                   施工单位项目负责人

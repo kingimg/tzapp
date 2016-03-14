@@ -2,7 +2,7 @@
    <ion-pane>
         <ion-tabs class="tabs-top tabs-icon-top">
             <!-- Tab 1 -->
-            <ion-tab title="待办事务" icon="ion-email" ng-controller="ctrl-daily-main">
+            <ion-tab title="待办事务" icon="ion-email" ng-controller="ctrl-daily-waitlist">
                 <ion-nav-view name="tab-tab1">
                     <ion-content>
                        <ion-refresher pulling-text="下拉刷新"
@@ -11,7 +11,7 @@
                      on-refresh="doWaitListRefresh()">
                       </ion-refresher>
                       <ion-list>
-                          <ion-item ng-repeat="item in waitdolist"  href="#/menus/daily/waitdo/{{item.NoticeID}}/{{item.ReplyID}}/{{item.Type}}">
+                          <ion-item ng-repeat="item in waitdolist" href="#/menus/daily/waitinfo/{{item.NoticeID}}/{{item.ReplyID}}/{{item.Type}}">
                            [{{item.TypeName}}]{{item.ProName}}
                           </ion-item>                                                                  
                     </ion-list>
@@ -51,7 +51,7 @@
                      on-refresh="doStandardListRefresh()">
                       </ion-refresher>
                       <ion-list>
-                          <ion-item ng-repeat="item in standardlist" href="#/menus/daily/info/{{item.InfoID}}">
+                          <ion-item ng-repeat="item in standardlist" href="#/menus/daily/standard/{{item.InfoID}}">
                               {{item.InfoTitle}}
                           </ion-item>       
                     </ion-list>

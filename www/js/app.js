@@ -110,6 +110,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
     };
 })
+//.directive("myDctv", function() {
+//    return function(scope, element, attrs) {
+//        element.bind("click", function() {
+//            scope.doWaitListRefresh();
+//        });                              
+//    }
+//})
 .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $httpProvider) {
     $httpProvider.defaults.headers.common['apikey'] = window.localStorage["apikey"];
     //$httpProvider.interceptors.push('httpInterceptor');
@@ -144,9 +151,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('menus.monitor-machinerys', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/machinerys.html', controller: 'ctrl-monitor-machinerys' } }, url: '/monitor/machinerys/:machinerysType' })
     .state('menus.monitor-machinery-detail', { views: { 'menus-monitor': { templateUrl: 'templates/monitor/machinery-detail.html', controller: 'ctrl-monitor-machinerydetail' } }, url: '/monitor/machinerydetail/:baId' })
     
-    .state('menus.daily-main', { views: { 'menus-daily': { templateUrl: 'templates/daily/main.html', controller: 'ctrl-daily-main' } }, cache: false , url: '/daily/main' })
+    .state('menus.daily-main', { views: { 'menus-daily': { templateUrl: 'templates/daily/main.html', controller: 'ctrl-daily-main' } }, url: '/daily/main' })
     .state('menus.daily-info', { views: { 'menus-daily': { templateUrl: 'templates/daily/daily-info.html', controller: 'ctrl-daily-info' } }, url: '/daily/info/:Id' })
-    .state('menus.daily-waitdo', { views: { 'menus-daily': { templateUrl: 'templates/daily/daily-waitdo.html', controller: 'ctrl-daily-waitdo' } }, url: '/daily/waitdo/:noticeId/:replyId/:type' })
+    .state('menus.daily-standard', { views: { 'menus-daily': { templateUrl: 'templates/daily/daily-standard.html', controller: 'ctrl-daily-info' } }, url: '/daily/standard/:Id' })
+    .state('menus.daily-waitinfo', { views: { 'menus-daily': { templateUrl: 'templates/daily/daily-waitinfo.html', controller: 'ctrl-daily-waitinfo' } }, url: '/daily/waitinfo/:noticeId/:replyId/:type' })
 
     .state('menus.check-projects', { views: { 'menus-check': { templateUrl: 'templates/check/projects.html', controller: 'ctrl-check-projects' } }, url: '/check/projects' })
     .state('menus.check-checks', { views: { 'menus-check': { templateUrl: 'templates/check/checks.html', controller: 'ctrl-check-checks' } }, url: '/check/projectchecks/:proId' })
@@ -155,6 +163,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     .state('menus.board-projects', { views: { 'menus-board': { templateUrl: 'templates/board/projects.html', controller: 'ctrl-board-projects' } }, url: '/board/projects' })
     .state('menus.board-project-detail', { views: { 'menus-board': { templateUrl: 'templates/board/project-detail.html', controller: 'ctrl-board-projectdetail' } }, url: '/board/projects/:proId' })
+    .state('menus.board-projectperson-detail', { views: { 'menus-board': { templateUrl: 'templates/common/properson-detail.html', controller: 'ctrl-board-projectpersondetail' } }, url: '/common/properson/:pperonid' })
+
 
     .state('menus.account-main', { views: { 'menus-account': { templateUrl: 'templates/account/main.html', controller: 'ctrl-account-main' } }, url: '/account/main' })
     .state('menus.account-userinfo', { views: { 'menus-account': { templateUrl: 'templates/account/userinfo.html', controller: 'ctrl-account-userinfo' } }, url: '/account/userinfo' })

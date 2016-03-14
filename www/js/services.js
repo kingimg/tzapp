@@ -59,7 +59,24 @@
         }
     };
 }])
-
+.factory('WaitList', ['$http', '$state', function ($http, $state) {
+    var waitlist = [];
+    return {
+        all: function () {
+            return waitlist;
+        },
+        push: function (list) {
+            waitlist = waitlist.concat(list);
+        },
+        remove: function (noticeId) {           
+            for (var i = 0; i < waitlist.length; i++) {
+                if (waitlist[i].NoticeID == noticeId) {                   
+                    waitlist.splice(i, 1);
+                }
+            }
+        }
+    };
+}])
 .factory('BoardProjects', function () {
     var projects = [{
         proId: 1,
