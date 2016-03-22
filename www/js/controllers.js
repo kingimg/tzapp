@@ -20,9 +20,9 @@ angular.module('starter.controllers', [])
          
 .constant('ApiEndpoint', {   
    //url: 'http://192.168.3.63:8085'    
-   //url: 'http://tzapp.safe110.net:8085'
+   url: 'http://tzapp.safe110.net:8085'
     //url: 'http://121.199.75.88:8085'
-      url:'http://183.129.189.108:8085'
+    //  url:'http://183.129.189.108:8085'
 })
 
 
@@ -495,6 +495,7 @@ angular.module('starter.controllers', [])
         $http.post(ApiEndpoint.url + '/zaSys/checkProList/?page=' + $scope.page + '&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 $scope.page_count = data.total;
+                if (data.rows)
                 $scope.projects = $scope.projects.concat(data.rows);
                 $scope.page++;
                 $scope.$broadcast("scroll.infiniteScrollComplete");
@@ -533,16 +534,18 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('ctrl-check-checks', function ($scope, $stateParams, $http, $state, ApiEndpoint) {
+.controller('ctrl-check-checks', function ($scope, $stateParams, $http, $state, ApiEndpoint, $ionicActionSheet) {
     $scope.checks = [];
     $scope.page = 1;
     $scope.page_count = 1;
     $scope.load_over = true;
-    var proName,checkUser;
+    var proName, checkUser;
+
     $scope.loadMore = function () {
         $http.post(ApiEndpoint.url + '/zaSys/checkList/?page=' + $scope.page + '&proid=' + $stateParams.proId + '&checkType=0,1&r=' + Math.random()).success(function (data) {
             if (data.success) {
                 $scope.page_count = data.total;
+                if (data.rows)
                 $scope.checks = $scope.checks.concat(data.rows);
                 if (data.rows.length>0) { proName = data.rows[0].ProName; checkUser = data.rows[0].CheckUser; }
                 $scope.page++;
@@ -581,26 +584,69 @@ angular.module('starter.controllers', [])
         })
     };
     $scope.addnew = function () {
-        $state.go("menus.check-checkadd", { operType: 'add', proId: $stateParams.proId, proName: proName, checkUser: checkUser });
+        $ionicActionSheet.show({
+            titleText: '新建检查',
+            cancelText: '取消',
+            buttons: [{ text: '安全检查' }, { text: '质量检查' }],
+            cancel: function () { },
+            buttonClicked: function (index) {
+                $state.go("menus.check-checkadd", { operType: 'add', proId: $stateParams.proId, proName: proName, checkUser: checkUser, checktypeid: index });
+                return true;
+            }
+        });
     };
+    
 })
 .controller('ctrl-check-checkdetail', function ($scope, $stateParams, $window, $http, $ionicActionSheet, $filter, ApiEndpoint, $ionicLoading, $timeout, $state) {
     $scope.checkdetail = {};
     $scope.photos = [];
     $scope.isedit = $stateParams.operType == 'edit';
+    $scope.CheckTypes = [
+        { typeid: 0, name: "安全检查" },
+        { typeid: 1, name: "质量检查" }
+    ];   
     if ($stateParams.operType=='edit'){        
         $http.post(ApiEndpoint.url + '/zaSys/checkDetail/?checkId=' + $stateParams.checkId + '&r=' + Math.random()).success(function (data) {
             if (data.success) {               
                 $scope.checkdetail.ProName = data.rows[0].ProName;
-                $scope.checkdetail.CheckType = data.rows[0].CheckType;
+                $scope.checkdetail.CheckType = $scope.CheckTypes[data.rows[0].CheckType];
                 $scope.checkdetail.CheckMode = data.rows[0].CheckMode;
                 $scope.checkdetail.CheckTime = $filter("date")(data.rows[0].CheckTime.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//'2011-11-11';//data.rows[0].CheckTime.replace(/\D/igm, "").trim();
                 $scope.checkdetail.CheckUser = data.rows[0].CheckUser;
-                if (data.rows[0].CheckMode == 41)
-                    $scope.checkdetail.Content1 = data.rows[0].Content3;
+                $scope.checkdetail.ItemDes = data.rows[0].ItemDes;
+                $scope.checkdetail.CheckNunber = data.rows[0].CheckNunber;
+                if ($stateParams.checktypeid == 1) {
+                    $http.post(ApiEndpoint.url + '/zaSys/subprojects/?proId=' + $stateParams.proId + '&r=' + Math.random()).success(function (prodata) {
+                        if (prodata.success) {
+                            $scope.SubPros = prodata.rows;
+                            angular.forEach($scope.SubPros, function (item) {
+                                if (item.ProID == data.rows[0].SubProID) {
+                                    $scope.checkdetail.SubPro = item;
+                                }
+                            });
+                        }
+                    });
+                    
+                }
+                if (data.rows[0].CheckMode == 41) {
+                    $scope.checkdetail.Content3 = data.rows[0].Content3;
+                    $scope.checkdetail.Content1 = data.rows[0].Content1;
+                    $scope.checkdetail.Content2 = data.rows[0].Content2;
+                    $scope.checkdetail.F1 = data.rows[0].F1;
+                    $scope.checkdetail.CheckResult5 = data.rows[0].CheckResult5;
+                    if (data.rows[0].CheckResult1 == 1)
+                        $scope.checkdetail.onjob1 = true;
+                    if (data.rows[0].CheckResult2 == 1)
+                        $scope.checkdetail.onjob2 = true;
+                    if (data.rows[0].CheckResult3 == 1)
+                        $scope.checkdetail.onjob3 = true;
+                    if (data.rows[0].CheckResult4 == 1)
+                        $scope.checkdetail.onjob4 = true;
+                }
                 else
                     $scope.checkdetail.Content1 = data.rows[0].F1;
                 $scope.checkdetail.WebApiUrl = ApiEndpoint.url;
+                $scope.checkdetail.ItemDes = data.rows[0].ItemDes;
                 //alert($scope.checkdetail.CheckTime);
                 //alert(data.obj);
                 if (data.obj) {
@@ -635,7 +681,19 @@ angular.module('starter.controllers', [])
     } else if ($stateParams.operType == 'add') {
         $scope.checkdetail.ProName = $stateParams.proName;
         $scope.checkdetail.CheckUser = $stateParams.checkUser;
-        //$scope.checkdetail.CheckType = 0;
+        $scope.checkdetail.CheckType = $scope.CheckTypes[$stateParams.checktypeid];
+        if ($stateParams.checktypeid == 1) {
+            $http.post(ApiEndpoint.url + '/zaSys/subprojects/?proId=' + $stateParams.proId + '&r=' + Math.random()).success(function (data) {
+                if (data.success) {
+                    $scope.SubPros = data.rows;
+                }
+            });
+            $http.post(ApiEndpoint.url + '/zaSys/GetNewCheckNumber/?r=' + Math.random()).success(function (data) {
+                if (data.success) {
+                    $scope.checkdetail.CheckNunber = data.obj;
+                }
+            });
+        }
     }
     
     $scope.showActionsheet = function () {
@@ -726,10 +784,27 @@ angular.module('starter.controllers', [])
             if (!checkForm())
                 return;
             var pics = getPicArr();
-            var poststr = ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics;
-            poststr += '&hasnotice=' + $scope.checkdetail.hasnotice;
+            var poststr = ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics;
+            poststr += "&ItemDes=" + $scope.checkdetail.ItemDes + "&F1=" + $scope.checkdetail.F1;
+            poststr += "&SubProID=" + ($scope.checkdetail.SubPro ? $scope.checkdetail.SubPro.ProID : 0);
+            poststr += "&CheckNunber=" + ($scope.checkdetail.CheckNunber ? $scope.checkdetail.CheckNunber : "");
+            poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
+            poststr += "&Content3=" + ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : "");
+            poststr += "&CheckResult5=" + ($scope.checkdetail.CheckResult5 ? $scope.checkdetail.CheckResult5 : "");
+            
+            var checkresult = 0;
+            if ($scope.checkdetail.onjob1)
+                checkresult |= 1;
+            if ($scope.checkdetail.onjob2)
+                checkresult |= 2;
+            if ($scope.checkdetail.onjob3)
+                checkresult |= 4;
+            if ($scope.checkdetail.onjob4)
+                checkresult |= 8;
+            poststr += "&CheckResult=" + checkresult;
             if ($scope.checkdetail.hasnotice)
             {
+                poststr += '&hasnotice=' + $scope.checkdetail.hasnotice;
                 poststr += '&NoticeType=' + $scope.checkdetail.NoticeType;
                 poststr += '&NoticeNo=' + $scope.checkdetail.NoticeNo;
                 poststr += '&StopPart=' + ($scope.checkdetail.StopPart?$scope.checkdetail.StopPart:"");
@@ -755,9 +830,27 @@ angular.module('starter.controllers', [])
                 return;
             var pics = getPicArr();            
             var checkdate = $filter("date")($scope.checkdetail.CheckTime, 'yyyy-MM-dd');
-            var poststr = ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics + '&r=' + Math.random();
-            poststr += '&hasnotice=' + $scope.checkdetail.hasnotice;
+            if ($scope.checkdetail.CheckType.typeid == 1)
+                $scope.checkdetail.CheckMode = 41;
+            var poststr = ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : "") + '&pics=' + pics + '&r=' + Math.random();
+            poststr += "&ItemDes=" + $scope.checkdetail.ItemDes + "&F1=" + $scope.checkdetail.F1;
+            poststr += "&SubProID=" + ($scope.checkdetail.SubPro ? $scope.checkdetail.SubPro.ProID : 0);
+            poststr += "&CheckNunber=" + ($scope.checkdetail.CheckNunber ? $scope.checkdetail.CheckNunber : "");            
+            poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
+            poststr += "&Content3=" + ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : "");
+            poststr += "&CheckResult5=" + ($scope.checkdetail.CheckResult5 ? $scope.checkdetail.CheckResult5 : "");
+            var checkresult = 0;
+            if ($scope.checkdetail.onjob1)
+                checkresult |= 1;
+            if ($scope.checkdetail.onjob2)
+                checkresult |= 2;
+            if ($scope.checkdetail.onjob3)
+                checkresult |= 4;
+            if ($scope.checkdetail.onjob4)
+                checkresult |= 8;
+            poststr += "&CheckResult=" + checkresult;
             if ($scope.checkdetail.hasnotice) {
+                poststr += '&hasnotice=' + $scope.checkdetail.hasnotice;
                 poststr += '&NoticeType=' + $scope.checkdetail.NoticeType;
                 poststr += '&NoticeNo=' + $scope.checkdetail.NoticeNo;
                 poststr += '&StopPart=' + ($scope.checkdetail.StopPart ? $scope.checkdetail.StopPart : "");
@@ -766,6 +859,7 @@ angular.module('starter.controllers', [])
                 poststr += '&GrantDate=' + $filter("date")($scope.checkdetail.GrantDate, 'yyyy-MM-dd');
                 poststr += '&MaxDoDate=' + $filter("date")($scope.checkdetail.MaxDoDate, 'yyyy-MM-dd');
             }
+            
             $http.post(poststr).success(function (data) {
                 if (data.success) {                    
                     $ionicLoading.show({
@@ -788,20 +882,18 @@ angular.module('starter.controllers', [])
                 template: '请选择检查类型！', duration: 1000
             });
             return false;
-        } else if (!$scope.checkdetail.CheckTime)
-        {
+        }
+        else if (!$scope.checkdetail.CheckTime) {
             $ionicLoading.show({
                 template: '检查日期不能为空！', duration: 1000
             });
             return false;
-        } else if (!$scope.checkdetail.CheckUser || ($scope.checkdetail.CheckUser && ($scope.checkdetail.CheckUser == null || $scope.checkdetail.CheckUser == "")))
-        {
+        } else if (!$scope.checkdetail.CheckUser || ($scope.checkdetail.CheckUser && ($scope.checkdetail.CheckUser == null || $scope.checkdetail.CheckUser == ""))) {
             $ionicLoading.show({
                 template: '监督员不能为空！', duration: 1000
             });
             return false;
-        } else if (!$scope.checkdetail.Content1 || ($scope.checkdetail.Content1 && ($scope.checkdetail.Content1 == null || $scope.checkdetail.Content1 == "")))
-        {
+        } else if (!$scope.checkdetail.Content1 || ($scope.checkdetail.Content1 && ($scope.checkdetail.Content1 == null || $scope.checkdetail.Content1 == ""))) {
             $ionicLoading.show({
                 template: '检查内容不能为空！', duration: 1000
             });
@@ -833,7 +925,7 @@ angular.module('starter.controllers', [])
                     template: '通知书内容不能为空！', duration: 1000
                 });
                 return false;
-            }  else if (!$scope.checkdetail.GrantDate) {
+            } else if (!$scope.checkdetail.GrantDate) {
                 $ionicLoading.show({
                     template: '通知书发放日期不能为空！', duration: 1000
                 });
@@ -845,6 +937,14 @@ angular.module('starter.controllers', [])
                 return false;
             }
 
+        }
+        if ($scope.checkdetail.CheckType.typeid == 1) {
+            if (!$scope.checkdetail.SubPro) {
+                $ionicLoading.show({
+                    template: '请选择检查部位！', duration: 1000
+                });
+                return false;
+            }
         }
         return true;
     }
@@ -912,7 +1012,9 @@ angular.module('starter.controllers', [])
                     else
                         row.badgestyle = "badge-assertive";
                 });
+                if (data.rows)
                 $scope.projects = $scope.projects.concat(data.rows);
+                //alert(data.rows.length);
                 $scope.page++;
                 $scope.$broadcast("scroll.infiniteScrollComplete");
                 if ($scope.page > $scope.page_count) {
@@ -1062,10 +1164,17 @@ angular.module('starter.controllers', [])
        // $window.open("http://tzapp.safe110.net:8085/checkresult.html", '_blank', "width=100%,height=100%,resizable=1", '');
     };
 })
-.controller('ctrl-account-userinfo', function ($scope) {
-
+.controller('ctrl-account-userinfo', function ($scope, $http, ApiEndpoint) {
+    $http.post(ApiEndpoint.url + '/zaSys/getUserInfo').success(function (data) {
+        if (data.success) {
+            $scope.userinfo = data.obj;
+        }
+    });
 })
 .controller('ctrl-account-zone', function ($scope) {
+
+})
+.controller('ctrl-account-about', function ($scope) {
 
 })
 

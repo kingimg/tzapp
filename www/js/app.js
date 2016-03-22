@@ -158,8 +158,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     .state('menus.check-projects', { views: { 'menus-check': { templateUrl: 'templates/check/projects.html', controller: 'ctrl-check-projects' } }, url: '/check/projects' })
     .state('menus.check-checks', { views: { 'menus-check': { templateUrl: 'templates/check/checks.html', controller: 'ctrl-check-checks' } }, url: '/check/projectchecks/:proId' })
-    .state('menus.check-checkdetail', { views: { 'menus-check': { templateUrl: 'templates/check/check-detail.html', controller: 'ctrl-check-checkdetail' } }, url: '/check/checkdetail/:operType/:checkId' })
-    .state('menus.check-checkadd', { views: { 'menus-check': { templateUrl: 'templates/check/check-detail.html', controller: 'ctrl-check-checkdetail' } }, url: '/check/checkadd/:operType/:proId/:proName/:checkUser' })
+    .state('menus.check-checkdetail', { views: { 'menus-check': { templateUrl: 'templates/check/check-detail.html', controller: 'ctrl-check-checkdetail' } }, url: '/check/checkdetail/:operType/:checkId/:proId/:checktypeid' })
+    .state('menus.check-checkadd', { views: { 'menus-check': { templateUrl: 'templates/check/check-detail.html', controller: 'ctrl-check-checkdetail' } }, url: '/check/checkadd/:operType/:proId/:proName/:checkUser/:checktypeid' })
 
     .state('menus.board-projects', { views: { 'menus-board': { templateUrl: 'templates/board/projects.html', controller: 'ctrl-board-projects' } }, url: '/board/projects' })
     .state('menus.board-project-detail', { views: { 'menus-board': { templateUrl: 'templates/board/project-detail.html', controller: 'ctrl-board-projectdetail' } }, url: '/board/projects/:proId' })
@@ -169,6 +169,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('menus.account-main', { views: { 'menus-account': { templateUrl: 'templates/account/main.html', controller: 'ctrl-account-main' } }, url: '/account/main' })
     .state('menus.account-userinfo', { views: { 'menus-account': { templateUrl: 'templates/account/userinfo.html', controller: 'ctrl-account-userinfo' } }, url: '/account/userinfo' })
     .state('menus.account-zone', { views: { 'menus-account': { templateUrl: 'templates/account/zone.html', controller: 'ctrl-account-zone' } }, url: '/account/zone' })
+    .state('menus.account-about', { views: { 'menus-account': { templateUrl: 'templates/account/about.html', controller: 'ctrl-account-about' } }, url: '/account/about' })
+
 
     .state("menus.common-company-detail", { views: { 'menus-monitor': { templateUrl: 'templates/common/company-detail.html', controller: 'ctrl-common-companydetail' } }, url: '/common/companys/:companyType/:deviceSN/:monitorType' })
     .state("menus.common-project-detail", { views: { 'menus-monitor': { templateUrl: 'templates/common/project-detail.html', controller: 'ctrl-common-projectdetail' } }, url: '/common/projects/:deviceSN/:monitorType' })

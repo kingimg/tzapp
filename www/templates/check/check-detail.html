@@ -1,20 +1,27 @@
-﻿<ion-view view-title="检查详情">
+﻿<ion-view>
+    <ion-nav-title>
+        {{checkdetail.CheckType.name}}
+    </ion-nav-title>
   <ion-content class="padding">
       <div class="list">
           <div class="item">
               工程名称
               <span class="item-note">{{checkdetail.ProName}}</span>
           </div>
-          <label class="item item-input item-select">
+          <label class="item item-input item-select" ng-if="checkdetail.CheckType.typeid==1">
               <div class="input-label">
-                  检查类型
+                  检查部位
               </div>
-              <select ng-model="checkdetail.CheckType">
-                  <option value="0">安全检查</option>
-                  <option value="1">质量检查</option>
+              <select ng-model="checkdetail.SubPro" ng-options="subpro.ProName for subpro in SubPros"> 
               </select>
           </label>
-          <label class="item item-input item-select" ng-if="checkdetail.CheckType==0">
+          <label class="item item-input item-input" ng-if="checkdetail.CheckType.typeid==1">
+              <div class="input-label">
+                  检查编号
+              </div>
+              <input type="text" ng-model="checkdetail.CheckNunber" />
+          </label>
+          <label class="item item-input item-select" ng-if="checkdetail.CheckType.typeid==0">
               <div class="input-label">
                   检查方式
               </div>
@@ -35,15 +42,37 @@
                   <option value="38">现场防火</option>
               </select>
           </label>
-          <label class="item item-input item-select" ng-if="checkdetail.CheckType==1">
+          <label class="item item-input item-select">
+              <div class="input-label">
+                  形象进度
+              </div>
+              <select ng-model="checkdetail.ItemDes">
+                  <option value="未开工">未开工</option>
+                  <option value="桩基">桩基</option>
+                  <option value="基础">基础</option>
+                  <option value="主体">主体</option>
+                  <option value="装饰装修">装饰装修</option>
+                  <option value="已竣工">已竣工</option>
+              </select>
+          </label>
+          <label class="item item-input item-select" ng-if="checkdetail.CheckType.typeid==1">
+              <div class="input-label">
+                  天气情况
+              </div>
+              <select ng-model="checkdetail.F1">
+                  <option value="晴">晴</option>
+                  <option value="阴">阴</option>
+              </select>
+          </label>
+          <!--<label class="item item-input item-select" ng-if="checkdetail.CheckType.typeid==1">
               <div class="input-label">
                   检查方式
               </div>
               <select ng-model="checkdetail.CheckMode">
                   <option value="41">监督检查</option>
-                  <!--<option value="42">现场踏勘</option>-->                  
+                  <option value="42">现场踏勘</option>                  
               </select>
-          </label>
+          </label>-->
           <label class="item item-input" ng-if="isedit">
               <div class="input-label">
                   检查时间
@@ -58,11 +87,70 @@
           </label> 
           <label class="item item-input">
               <div class="input-label">
-                  监督员
+                  检查人员
               </div>
               <input type="text" name="checkuser" ng-model="checkdetail.CheckUser">
           </label>  
-          <label class="item item-input">              
+          <label class="item item-input item-toggle" ng-if="checkdetail.CheckType.typeid==1">
+              <div class="input-label">
+                  项目经理是否在岗
+              </div>
+              <label class="toggle toggle-balanced">
+                  <input type="checkbox" ng-model="checkdetail.onjob1">
+                  <div class="track">
+                      <div class="handle"></div>
+                  </div>
+              </label>
+          </label>
+          <label class="item item-input item-toggle" ng-if="checkdetail.CheckType.typeid==1">
+              <div class="input-label">
+                  项目总监是否在岗
+              </div>
+              <label class="toggle toggle-balanced">
+                  <input type="checkbox" ng-model="checkdetail.onjob2">
+                  <div class="track">
+                      <div class="handle"></div>
+                  </div>
+              </label>
+          </label>
+          <label class="item item-input item-toggle" ng-if="checkdetail.CheckType.typeid==1">
+              <div class="input-label">
+                  质检员是否在岗
+              </div>
+              <label class="toggle toggle-balanced">
+                  <input type="checkbox" ng-model="checkdetail.onjob3">
+                  <div class="track">
+                      <div class="handle"></div>
+                  </div>
+              </label>
+          </label>
+          <label class="item item-input item-toggle" ng-if="checkdetail.CheckType.typeid==1">
+              <div class="input-label">
+                  安全员是否在岗
+              </div>
+              <label class="toggle toggle-balanced">
+                  <input type="checkbox" ng-model="checkdetail.onjob4">
+                  <div class="track">
+                      <div class="handle"></div>
+                  </div>
+              </label>
+          </label>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==1">
+              <div class="input-label">
+                  其它应在岗人员
+              </div>
+              <input type="text" ng-model="checkdetail.CheckResult5">
+          </label>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==1">
+              <textarea name="checkcontent" rows="4" placeholder="资料" ng-model="checkdetail.Content1"></textarea>
+          </label>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==1">
+              <textarea name="checkcontent" rows="4" placeholder="实体" ng-model="checkdetail.Content2"></textarea>
+          </label>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==1">
+              <textarea name="checkcontent" rows="4" placeholder="检查意见" ng-model="checkdetail.Content3"></textarea>
+          </label>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0">              
               <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.Content1"></textarea>
           </label>
           <label class="item item-input item-toggle">
@@ -76,7 +164,7 @@
                   </div>
               </label>
           </label>
-          <div class="item item-input item-select" ng-if="checkdetail.hasnotice && checkdetail.CheckType==0">
+          <div class="item item-input item-select" ng-if="checkdetail.hasnotice && checkdetail.CheckType.typeid==0">
               <div class="input-label">
                   通知书类型
               </div>
@@ -86,7 +174,7 @@
                   <option value="3">安全全面停工整改</option>
                </select>
           </div>
-          <div class="item item-input item-select" ng-if="checkdetail.hasnotice && checkdetail.CheckType==1">
+          <div class="item item-input item-select" ng-if="checkdetail.hasnotice && checkdetail.CheckType.typeid==1">
               <div class="input-label">
                   通知书类型
               </div>

@@ -9,7 +9,7 @@
                      on-refresh="doRefresh()">
       </ion-refresher> 
       <div class="list">
-          <a class="item item-avatar" href="#/menus/check/checkdetail/edit/{{check.CheckID}}" ng-repeat="check in checks">
+          <a class="item item-avatar" href="#/menus/check/checkdetail/edit/{{check.CheckID}}/{{check.ProID}}/{{check.CheckType}}" ng-repeat="check in checks">
               <div class="item-image">
                   <i class="icon ion-ios-paper-outline icon-large positive"></i>
                   <div class="font-smaller">{{check.CheckTypeName}}</div>
