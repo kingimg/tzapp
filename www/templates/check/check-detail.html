@@ -73,17 +73,15 @@
                   <option value="42">现场踏勘</option>                  
               </select>
           </label>-->
-          <label class="item item-input" ng-if="isedit">
-              <div class="input-label">
+          <label class="item" ng-if="isedit">  
                   检查时间
-              </div>
-              <input type="text" name="CheckTime" ng-model="checkdetail.CheckTime" value="{{checkdetail.CheckTime}}" />
+              <span class="item-note">{{checkdetail.CheckTime}}</span>
+              <!--<input type="text" name="CheckTime" ng-model="checkdetail.CheckTime" value="{{checkdetail.CheckTime}}" readonly />-->
           </label>  
-          <label class="item item-input" ng-if="!isedit">
-              <div class="input-label">
-                  检查时间
-              </div>
-              <input type="date" name="CheckTime" ng-model="checkdetail.CheckTime" />
+          <label class="item" ng-if="!isedit">    
+                  检查时间      
+              <span class="item-note">{{checkdetail.CheckTime}}</span>
+              <!--<input type="text" name="CheckTime" ng-model="checkdetail.CheckTime" value="{{checkdetail.CheckTime}}" readonly />-->
           </label> 
           <label class="item item-input">
               <div class="input-label">

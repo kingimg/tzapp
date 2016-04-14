@@ -19,8 +19,8 @@ angular.module('starter.controllers', [])
 //}])
          
 .constant('ApiEndpoint', {   
-   //url: 'http://192.168.3.63:8085'    
-   url: 'http://tzapp.safe110.net:8085'
+   url: 'http://192.168.3.63:8085'    
+   //url: 'http://tzapp.safe110.net:8085'
     //url: 'http://121.199.75.88:8085'
     //  url:'http://183.129.189.108:8085'
 })
@@ -681,6 +681,9 @@ angular.module('starter.controllers', [])
     } else if ($stateParams.operType == 'add') {
         $scope.checkdetail.ProName = $stateParams.proName;
         $scope.checkdetail.CheckUser = $stateParams.checkUser;
+        var d = new Date();
+        ;
+        $scope.checkdetail.CheckTime = d.toLocaleDateString();//$filter("date")(new Date().replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//'2011-11-11';//data.rows[0].CheckTime.replace(/\D/igm, "").trim();
         $scope.checkdetail.CheckType = $scope.CheckTypes[$stateParams.checktypeid];
         if ($stateParams.checktypeid == 1) {
             $http.post(ApiEndpoint.url + '/zaSys/subprojects/?proId=' + $stateParams.proId + '&r=' + Math.random()).success(function (data) {
