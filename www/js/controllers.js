@@ -20,9 +20,9 @@ angular.module('starter.controllers', [])
          
 .constant('ApiEndpoint', {   
    //url: 'http://192.168.3.63:8085'    
-   //url: 'http://tzapp.safe110.net:8085'
+   url: 'http://tzapp.safe110.net:8085'
     //url: 'http://121.199.75.88:8085'
-      url:'http://183.129.189.108:8085'
+     // url:'http://183.129.189.108:8085'
 })
 
 
@@ -787,12 +787,13 @@ angular.module('starter.controllers', [])
             if (!checkForm())
                 return;
             var pics = getPicArr();
-            var poststr = ApiEndpoint.url + '/zaSys/editCheck/?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + $scope.checkdetail.Content1 + '&pics=' + pics;
-            poststr += "&ItemDes=" + $scope.checkdetail.ItemDes + "&F1=" + $scope.checkdetail.F1;
+            var poststr = ApiEndpoint.url + '/zaSys/editCheck/';
+
+            poststr += '?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&pics=' + escape(pics) + "&ItemDes=" + $scope.checkdetail.ItemDes + "&F1=" + $scope.checkdetail.F1;
             poststr += "&SubProID=" + ($scope.checkdetail.SubPro ? $scope.checkdetail.SubPro.ProID : 0);
             poststr += "&CheckNunber=" + ($scope.checkdetail.CheckNunber ? $scope.checkdetail.CheckNunber : "");
-            poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
-            poststr += "&Content3=" + ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : "");
+            //poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
+            //poststr += "&Content3=" + ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : "");
             poststr += "&CheckResult5=" + ($scope.checkdetail.CheckResult5 ? $scope.checkdetail.CheckResult5 : "");
             
             var checkresult = 0;
@@ -812,12 +813,14 @@ angular.module('starter.controllers', [])
                 poststr += '&NoticeNo=' + $scope.checkdetail.NoticeNo;
                 poststr += '&StopPart=' + ($scope.checkdetail.StopPart?$scope.checkdetail.StopPart:"");
                 poststr += '&GrantObject=' + (($scope.checkdetail.GrantObject1?1:0)|($scope.checkdetail.GrantObject2?2:0)|($scope.checkdetail.GrantObject3?4:0));
-                poststr += '&NoticeContent1=' + ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : "");
+                //poststr += '&NoticeContent1=' + ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : "");
                 poststr += '&GrantDate=' + $scope.checkdetail.GrantDate;
                 poststr += '&MaxDoDate=' + $scope.checkdetail.MaxDoDate;
             }
             poststr += '&r=' + Math.random();
-            $http.post(poststr).success(function (data) {
+            var postdata = { Content1: ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : ""), Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : "") };
+            //alert(poststr); return;
+            $http.post(poststr, postdata).success(function (data) {
                 if (data.success) {
                     $ionicLoading.show({
                         template: '修改成功！', duration: 1000
@@ -835,12 +838,12 @@ angular.module('starter.controllers', [])
             var checkdate = $filter("date")($scope.checkdetail.CheckTime, 'yyyy-MM-dd');
             if ($scope.checkdetail.CheckType.typeid == 1)
                 $scope.checkdetail.CheckMode = 41;
-            var poststr = ApiEndpoint.url + '/zaSys/addCheck/?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser + '&content1=' + ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : "") + '&pics=' + pics + '&r=' + Math.random();
-            poststr += "&ItemDes=" + $scope.checkdetail.ItemDes + "&F1=" + $scope.checkdetail.F1;
+            var poststr = ApiEndpoint.url + '/zaSys/addCheck/';
+            poststr += '?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser +  '&pics=' + pics + '&r=' + Math.random() + "&ItemDes=" + $scope.checkdetail.ItemDes + "&F1=" + $scope.checkdetail.F1;
             poststr += "&SubProID=" + ($scope.checkdetail.SubPro ? $scope.checkdetail.SubPro.ProID : 0);
             poststr += "&CheckNunber=" + ($scope.checkdetail.CheckNunber ? $scope.checkdetail.CheckNunber : "");            
-            poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
-            poststr += "&Content3=" + ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : "");
+            //poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
+            //poststr += "&Content3=" + ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : "");
             poststr += "&CheckResult5=" + ($scope.checkdetail.CheckResult5 ? $scope.checkdetail.CheckResult5 : "");
             var checkresult = 0;
             if ($scope.checkdetail.onjob1)
@@ -858,12 +861,12 @@ angular.module('starter.controllers', [])
                 poststr += '&NoticeNo=' + $scope.checkdetail.NoticeNo;
                 poststr += '&StopPart=' + ($scope.checkdetail.StopPart ? $scope.checkdetail.StopPart : "");
                 poststr += '&GrantObject=' + (($scope.checkdetail.GrantObject1 ? 1 : 0) | ($scope.checkdetail.GrantObject2 ? 2 : 0) | ($scope.checkdetail.GrantObject3 ? 4 : 0));
-                poststr += '&NoticeContent1=' + $scope.checkdetail.NoticeContent1;
+                //poststr += '&NoticeContent1=' + $scope.checkdetail.NoticeContent1;
                 poststr += '&GrantDate=' + $filter("date")($scope.checkdetail.GrantDate, 'yyyy-MM-dd');
                 poststr += '&MaxDoDate=' + $filter("date")($scope.checkdetail.MaxDoDate, 'yyyy-MM-dd');
             }
-            
-            $http.post(poststr).success(function (data) {
+            var postdata = { Content1: ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : ""), Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : "") };
+            $http.post(poststr, postdata).success(function (data) {
                 if (data.success) {                    
                     $ionicLoading.show({
                     template: '保存成功！', duration: 1000
