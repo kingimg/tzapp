@@ -32,6 +32,7 @@
                   <option value="24">建设工程安全生产监督抽查</option>
                   <option value="25">建设工程安全生产约谈</option>
                   <option value="26">行政处罚</option>
+                  <option value="27">其它</option>
                   <option value="31">春季复工</option>
                   <option value="32">扬尘控制</option>
                   <option value="33">深基坑</option>
@@ -148,8 +149,11 @@
           <label class="item item-input" ng-if="checkdetail.CheckType.typeid==1">
               <textarea name="checkcontent" rows="4" placeholder="检查意见" ng-model="checkdetail.Content3"></textarea>
           </label>
-          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0">              
-              <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.Content1"></textarea>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0 && (checkdetail.CheckMode==21||checkdetail.CheckMode==22||checkdetail.CheckMode==23)">              
+              <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.F1"></textarea>
+          </label>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0 && checkdetail.CheckMode>23">
+              <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.CheckResult2"></textarea>
           </label>
           <label class="item item-input item-toggle">
               <div class="input-label">

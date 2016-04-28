@@ -20,9 +20,9 @@ angular.module('starter.controllers', [])
          
 .constant('ApiEndpoint', {   
    //url: 'http://192.168.3.63:8085'    
-   url: 'http://tzapp.safe110.net:8085'
+   //url: 'http://tzapp.safe110.net:8085'
     //url: 'http://121.199.75.88:8085'
-     // url:'http://183.129.189.108:8085'
+      url:'http://183.129.189.108:8085'
 })
 
 
@@ -604,7 +604,10 @@ angular.module('starter.controllers', [])
     $scope.CheckTypes = [
         { typeid: 0, name: "安全检查" },
         { typeid: 1, name: "质量检查" }
-    ];   
+    ];
+    $scope.checkdetail.F1 = "";
+    $scope.checkdetail.Content3 = "";
+    $scope.checkdetail.CheckResult2 = "";
     if ($stateParams.operType=='edit'){        
         $http.post(ApiEndpoint.url + '/zaSys/checkDetail/?checkId=' + $stateParams.checkId + '&r=' + Math.random()).success(function (data) {
             if (data.success) {               
@@ -615,6 +618,8 @@ angular.module('starter.controllers', [])
                 $scope.checkdetail.CheckUser = data.rows[0].CheckUser;
                 $scope.checkdetail.ItemDes = data.rows[0].ItemDes;
                 $scope.checkdetail.CheckNunber = data.rows[0].CheckNunber;
+                $scope.checkdetail.F1 = data.rows[0].F1;
+                $scope.checkdetail.CheckResult2 = data.rows[0].CheckResult2;
                 if ($stateParams.checktypeid == 1) {
                     $http.post(ApiEndpoint.url + '/zaSys/subprojects/?proId=' + $stateParams.proId + '&r=' + Math.random()).success(function (prodata) {
                         if (prodata.success) {
@@ -642,9 +647,7 @@ angular.module('starter.controllers', [])
                         $scope.checkdetail.onjob3 = true;
                     if (data.rows[0].CheckResult4 == 1)
                         $scope.checkdetail.onjob4 = true;
-                }
-                else
-                    $scope.checkdetail.Content1 = data.rows[0].F1;
+                }               
                 $scope.checkdetail.WebApiUrl = ApiEndpoint.url;
                 $scope.checkdetail.ItemDes = data.rows[0].ItemDes;
                 //alert($scope.checkdetail.CheckTime);
@@ -681,6 +684,7 @@ angular.module('starter.controllers', [])
     } else if ($stateParams.operType == 'add') {
         $scope.checkdetail.ProName = $stateParams.proName;
         $scope.checkdetail.CheckUser = $stateParams.checkUser;
+        $scope.checkdetail.GrantObject1 = true;
         var d = new Date();
         ;
         $scope.checkdetail.CheckTime = d.toLocaleDateString();//$filter("date")(new Date().replace(/\D/igm, "").trim(), 'yyyy-MM-dd');//'2011-11-11';//data.rows[0].CheckTime.replace(/\D/igm, "").trim();
@@ -782,14 +786,14 @@ angular.module('starter.controllers', [])
         //window.plugins.socialsharing.shareVia('epson.print', '检查文件', filepath, filepath, null, function () { console.log('share ok') }, function (msg) { alert('error: ' + msg) });
         window.plugins.socialsharing.share('检查文件', "subject", filepath);
     };
-    $scope.savecheck = function () {
+    $scope.savecheck = function () {        
         if ($stateParams.operType == 'edit') {
             if (!checkForm())
                 return;
             var pics = getPicArr();
             var poststr = ApiEndpoint.url + '/zaSys/editCheck/';
 
-            poststr += '?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&pics=' + escape(pics) + "&ItemDes=" + $scope.checkdetail.ItemDes + "&F1=" + $scope.checkdetail.F1;
+            poststr += '?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&pics=' + escape(pics) + "&ItemDes=" + $scope.checkdetail.ItemDes ;
             poststr += "&SubProID=" + ($scope.checkdetail.SubPro ? $scope.checkdetail.SubPro.ProID : 0);
             poststr += "&CheckNunber=" + ($scope.checkdetail.CheckNunber ? $scope.checkdetail.CheckNunber : "");
             //poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
@@ -818,7 +822,10 @@ angular.module('starter.controllers', [])
                 poststr += '&MaxDoDate=' + $scope.checkdetail.MaxDoDate;
             }
             poststr += '&r=' + Math.random();
-            var postdata = { Content1: ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : ""), Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : "") };
+            var f1value = $scope.checkdetail.F1 ? $scope.checkdetail.F1 : "";
+            if ($scope.checkdetail.CheckMode > 23)
+                f1value = $scope.checkdetail.CheckResult2 ? $scope.checkdetail.CheckResult2 : "";
+            var postdata = { Content1: ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : ""), Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : ""), "F1": f1value };
             //alert(poststr); return;
             $http.post(poststr, postdata).success(function (data) {
                 if (data.success) {
@@ -839,7 +846,7 @@ angular.module('starter.controllers', [])
             if ($scope.checkdetail.CheckType.typeid == 1)
                 $scope.checkdetail.CheckMode = 41;
             var poststr = ApiEndpoint.url + '/zaSys/addCheck/';
-            poststr += '?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser +  '&pics=' + pics + '&r=' + Math.random() + "&ItemDes=" + $scope.checkdetail.ItemDes + "&F1=" + $scope.checkdetail.F1;
+            poststr += '?proId=' + $stateParams.proId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkMode=' + $scope.checkdetail.CheckMode + '&checkTime=' + checkdate + '&checkUser=' + $scope.checkdetail.CheckUser +  '&pics=' + pics + '&r=' + Math.random() + "&ItemDes=" + $scope.checkdetail.ItemDes;
             poststr += "&SubProID=" + ($scope.checkdetail.SubPro ? $scope.checkdetail.SubPro.ProID : 0);
             poststr += "&CheckNunber=" + ($scope.checkdetail.CheckNunber ? $scope.checkdetail.CheckNunber : "");            
             //poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
@@ -865,7 +872,10 @@ angular.module('starter.controllers', [])
                 poststr += '&GrantDate=' + $filter("date")($scope.checkdetail.GrantDate, 'yyyy-MM-dd');
                 poststr += '&MaxDoDate=' + $filter("date")($scope.checkdetail.MaxDoDate, 'yyyy-MM-dd');
             }
-            var postdata = { Content1: ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : ""), Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : "") };
+            var f1value = $scope.checkdetail.F1 ? $scope.checkdetail.F1 : "";
+            if ($scope.checkdetail.CheckMode > 23)
+                f1value = $scope.checkdetail.CheckResult2 ? $scope.checkdetail.CheckResult2 : "";
+            var postdata = { Content1: ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : ""), Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : ""), "F1": f1value };
             $http.post(poststr, postdata).success(function (data) {
                 if (data.success) {                    
                     $ionicLoading.show({
@@ -899,7 +909,7 @@ angular.module('starter.controllers', [])
                 template: '监督员不能为空！', duration: 1000
             });
             return false;
-        } else if (!$scope.checkdetail.Content1 || ($scope.checkdetail.Content1 && ($scope.checkdetail.Content1 == null || $scope.checkdetail.Content1 == ""))) {
+        } else if ($scope.checkdetail.F1 == "" && $scope.checkdetail.Content3 == "" && $scope.checkdetail.CheckResult2 == "") {
             $ionicLoading.show({
                 template: '检查内容不能为空！', duration: 1000
             });
@@ -1039,14 +1049,145 @@ angular.module('starter.controllers', [])
     };
 })
 
+.controller('ctrl-board-projectbeian', function ($scope, $stateParams, $http, $filter, $ionicActionSheet, ApiEndpoint, $window) {
+    $scope.beiandetail = {};
+    $scope.photos = [];
+    $scope.photos2 = [];
+    $http.post(ApiEndpoint.url + '/zaSys/getProBeiAnDetail?beiAnID=' + $stateParams.beiAnId + '&r=' + Math.random()).success(function (data) {
+        if (data.success) {
+            $scope.beiandetail.BeiAnICP = data.obj.BeiAnICP;
+            $scope.beiandetail.InstallUnitName = data.obj.InstallUnitName;
+            if(data.obj.InstallDate)
+            $scope.beiandetail.InstallDate = $filter("date")(data.obj.InstallDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');;
+            $scope.beiandetail.CheckUnitName = data.obj.CheckUnitName;
+            if (data.obj.CheckDate)
+            $scope.beiandetail.CheckDate = $filter("date")(data.obj.CheckDate.replace(/\D/igm, "").trim(), 'yyyy-MM-dd');;
+            $scope.beiandetail.SiteNo = data.obj.SiteNo;
+            if (data.rows) {
+                var pics1 = [],pics2 = [];
+                for (var i = 0; i < data.rows.length; i++) {
+                    data.rows[i].PicPath_s = ApiEndpoint.url + data.rows[i].PicPath_s
+                    if (data.rows[i].FileType == 1)
+                        pics1.push(data.rows[i]);
+                    else if(data.rows[i].FileType == 2)
+                        pics2.push(data.rows[i]);
+                }                
+                $scope.photos = $scope.photos.concat(pics1);
+                $scope.photos2 = $scope.photos2.concat(pics2);
+            }
+        } else {
+            alert(data.msg);
+        }
+    });
+    $scope.pictype = 1;
+    $scope.showActionsheet = function () {
+        $ionicActionSheet.show({
+            titleText: '上传附件资料',
+            cancelText: '取消',
+            buttons: [{ text: '拍照' }, { text: '从相册中选取' }],
+            cancel: function () { },
+            buttonClicked: function (index) {
+                $scope.pictype = 1;
+                switch (index) {
+                    case 1: takePhoto(); break;
+                    case 0:
+                    default: makePhoto(); break;
+                }
+                return true;
+            }
+        });
+    };
+    $scope.showActionsheet2 = function () {
+        $ionicActionSheet.show({
+            titleText: '上传使用登记表',
+            cancelText: '取消',
+            buttons: [{ text: '拍照' }, { text: '从相册中选取' }],
+            cancel: function () { },
+            buttonClicked: function (index) {
+                $scope.pictype = 2;
+                switch (index) {
+                    case 1: takePhoto(); break;
+                    case 0:
+                    default: makePhoto(); break;
+                }
+                return true;
+            }
+        });
+    };
+    $scope.showPic = function (url) {
+        $window.open(url, '_blank', "width=100%,height=100%,resizable=1", '')
+    };
+    function onPhotoDone(imageURI) {
+        uploadPhoto(imageURI); //alert(imageURI);
+    }
+    function onPhotoFail(message) {
+        if (message.indexOf('cancelled') < 0) {
+            alert('出錯了：' + message);
+        }
+    }
+    function getPicArr(pictype) {        
+        var str = '';
+        if (pictype == 1) {
+            for (var i in $scope.photos) {
+                str += $scope.photos[i].PicPath + ',';
+            }
+        }
+        else if (pictype == 2)
+        {
+            for (var i in $scope.photos2) {
+                str += $scope.photos2[i].PicPath + ',';
+            }
+        }
+        return str.substr(0, str.lastIndexOf(','));
+    }
+    function uploadPhoto(imageURI) {
+        var done = function (r) {
+            var reg = eval('(' + r.response + ')');
+            var photo = { PicPath: reg.obj, PicPath_s: imageURI };
+            $scope.$apply(function () {
+                if ($scope.pictype == 1)
+                    $scope.photos.push(photo);
+                else if($scope.pictype == 2)
+                    $scope.photos2.push(photo);
+            });
+        };
+
+        var fail = function (e) {
+            alert(e.code);
+        };
+
+        var options = new FileUploadOptions();
+        options.fileKey = "fileAddPic";
+        options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1).split("?")[0];
+        //如果是图片格式，就用image/jpeg，其他文件格式上官网查API
+        options.mimeType = "image/jpeg";
+        options.chunkedMode = false;
+        var ft = new FileTransfer();
+        ft.upload(imageURI, encodeURI(ApiEndpoint.url + "/common/upload/?pictype=" + $scope.pictype), done, fail, options);
+    }
+    function makePhoto() {
+        navigator.camera.getPicture(onPhotoDone, onPhotoFail, {
+            quality: 100, targetWidth: 800, targetHeight: 800, destinationType: navigator.camera.DestinationType.FILE_URI
+        });
+    }
+    function takePhoto() {
+        navigator.camera.getPicture(onPhotoDone, onPhotoFail, {
+            quality: 100, targetWidth: 800, targetHeight: 800, destinationType: navigator.camera.DestinationType.FILE_URI
+        , sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM
+        });
+    }
+})
+
 .controller('ctrl-board-projectdetail', function ($scope, $stateParams, $http, ApiEndpoint) {
     $scope.projectDetail = {};
     $scope.checks = [];
     $scope.persons = [];
+    $scope.beians = [];
     $scope.devices = [];
     $scope.IsLoadForMonitor = true;
     $scope.IsLoadForCheck = true;
     $scope.IsLoadForPerson = true;
+    $scope.IsLoadForBeiAn = true;
     $scope.shownGroup = 1;
     $scope.toggleGroup = function (index) {        
         if ($scope.isGroupShown(index)) {
@@ -1073,6 +1214,13 @@ angular.module('starter.controllers', [])
                     if (data.success) {
                         $scope.persons = $scope.persons.concat(data.rows);
                         $scope.IsLoadForPerson = false;
+                    }
+                })
+            } else if ($scope.IsLoadForBeiAn && index == 7) {
+                $http.post(ApiEndpoint.url + '/zaSys/getProBeiAnList/?proid=' + $stateParams.proId + '&r=' + Math.random()).success(function (data) {
+                    if (data.success) {
+                        $scope.beians = $scope.beians.concat(data.rows);
+                        $scope.IsLoadForBeiAn = false;
                     }
                 })
             }

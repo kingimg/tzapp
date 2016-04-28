@@ -164,6 +164,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('menus.board-projects', { views: { 'menus-board': { templateUrl: 'templates/board/projects.html', controller: 'ctrl-board-projects' } }, url: '/board/projects' })
     .state('menus.board-project-detail', { views: { 'menus-board': { templateUrl: 'templates/board/project-detail.html', controller: 'ctrl-board-projectdetail' } }, url: '/board/projects/:proId' })
     .state('menus.board-projectperson-detail', { views: { 'menus-board': { templateUrl: 'templates/common/properson-detail.html', controller: 'ctrl-board-projectpersondetail' } }, url: '/common/properson/:pperonid' })
+    .state('menus.board-project-beian', { views: { 'menus-board': { templateUrl: 'templates/board/project-beian.html', controller: 'ctrl-board-projectbeian' } }, url: '/board/probeian/:beiAnId' })
 
 
     .state('menus.account-main', { views: { 'menus-account': { templateUrl: 'templates/account/main.html', controller: 'ctrl-account-main' } }, url: '/account/main' })

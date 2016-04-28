@@ -185,6 +185,22 @@
               </a>   -->            
           </div>
           <!--end-->
+          <div class="item-box">
+              <ion-item ng-click="toggleGroup(7)"
+                        ng-class="{true: 'item-calm roundedtop',false:'item-stable rounded'}[isGroupShown(7)]">
+                  <i class="icon" ng-class="isGroupShown(7) ? 'ion-minus' : 'ion-plus'"></i>
+                  &nbsp;
+                  起重机械
+              </ion-item>
+              <a class="item item-accordion" href="#/menus/board/probeian/{{beian.BeiAnID}}" ng-show="isGroupShown(7)" ng-repeat="beian in beians">
+                  {{beian.BeiAnICP}}    
+                  <span class="item-note">{{beian.SiteNo}}</span>             
+              </a>
+              <!--  <a class="item item-accordion" href="#" ng-show="isGroupShown(6)">
+              施工单位项目负责人
+              <span class="item-note">王小</span>
+          </a>   -->
+          </div>
       </ion-list>
   </ion-content>
 </ion-view>
