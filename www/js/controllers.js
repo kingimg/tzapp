@@ -619,6 +619,7 @@ angular.module('starter.controllers', [])
                 $scope.checkdetail.ItemDes = data.rows[0].ItemDes;
                 $scope.checkdetail.CheckNunber = data.rows[0].CheckNunber;
                 $scope.checkdetail.F1 = data.rows[0].F1;
+                $scope.checkdetail.F2 = data.rows[0].F2;
                 $scope.checkdetail.CheckResult2 = data.rows[0].CheckResult2;
                 if ($stateParams.checktypeid == 1) {
                     $http.post(ApiEndpoint.url + '/zaSys/subprojects/?proId=' + $stateParams.proId + '&r=' + Math.random()).success(function (prodata) {
@@ -823,9 +824,13 @@ angular.module('starter.controllers', [])
             }
             poststr += '&r=' + Math.random();
             var f1value = $scope.checkdetail.F1 ? $scope.checkdetail.F1 : "";
+            var con1value = $scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : "";
+            if ($scope.checkdetail.CheckMode == 24)
+                con1value = $scope.checkdetail.F2;
             if ($scope.checkdetail.CheckMode > 23)
                 f1value = $scope.checkdetail.CheckResult2 ? $scope.checkdetail.CheckResult2 : "";
-            var postdata = { Content1: ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : ""), Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : ""), "F1": f1value };
+            
+            var postdata = { Content1: con1value, Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : ""), "F1": f1value };
             //alert(poststr); return;
             $http.post(poststr, postdata).success(function (data) {
                 if (data.success) {
@@ -872,10 +877,13 @@ angular.module('starter.controllers', [])
                 poststr += '&GrantDate=' + $filter("date")($scope.checkdetail.GrantDate, 'yyyy-MM-dd');
                 poststr += '&MaxDoDate=' + $filter("date")($scope.checkdetail.MaxDoDate, 'yyyy-MM-dd');
             }
+            var con1value = $scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : "";
+            if ($scope.checkdetail.CheckMode == 24)
+                con1value = $scope.checkdetail.F2;
             var f1value = $scope.checkdetail.F1 ? $scope.checkdetail.F1 : "";
             if ($scope.checkdetail.CheckMode > 23)
                 f1value = $scope.checkdetail.CheckResult2 ? $scope.checkdetail.CheckResult2 : "";
-            var postdata = { Content1: ($scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : ""), Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : ""), "F1": f1value };
+            var postdata = { Content1: con1value, Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : ""), "F1": f1value };
             $http.post(poststr, postdata).success(function (data) {
                 if (data.success) {                    
                     $ionicLoading.show({

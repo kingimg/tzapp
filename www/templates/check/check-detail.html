@@ -152,7 +152,13 @@
           <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0 && (checkdetail.CheckMode==21||checkdetail.CheckMode==22||checkdetail.CheckMode==23)">              
               <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.F1"></textarea>
           </label>
-          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0 && checkdetail.CheckMode>23">
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0 && checkdetail.CheckMode==24">
+              <textarea name="checkcontent" rows="4" placeholder="抽查记录" ng-model="checkdetail.F2"></textarea>
+          </label>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0 && checkdetail.CheckMode==24">
+              <textarea name="checkcontent" rows="4" placeholder="抽查意见" ng-model="checkdetail.CheckResult2"></textarea>
+          </label>
+          <label class="item item-input" ng-if="checkdetail.CheckType.typeid==0 && checkdetail.CheckMode>24">
               <textarea name="checkcontent" rows="4" placeholder="检查内容" ng-model="checkdetail.CheckResult2"></textarea>
           </label>
           <label class="item item-input item-toggle">
