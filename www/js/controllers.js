@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+﻿angular.module('starter.controllers', [])
 
 
 //angular.module('starter.controllers', []).directive('dateFormat', ['$filter', function ($filter) {
@@ -1075,10 +1075,14 @@ angular.module('starter.controllers', [])
                 var pics1 = [],pics2 = [];
                 for (var i = 0; i < data.rows.length; i++) {
                     data.rows[i].PicPath_s = ApiEndpoint.url + data.rows[i].PicPath_s
-                    if (data.rows[i].FileType == 1)
+                    if (data.rows[i].FileType == 1) {
                         pics1.push(data.rows[i]);
-                    else if(data.rows[i].FileType == 2)
+                        $scope.photoguid1 = data.rows[i].FormDataID;
+                    }
+                    else if (data.rows[i].FileType == 2) {
                         pics2.push(data.rows[i]);
+                        $scope.photoguid1 = data.rows[i].FormDataID;
+                    }
                 }                
                 $scope.photos = $scope.photos.concat(pics1);
                 $scope.photos2 = $scope.photos2.concat(pics2);
@@ -1122,6 +1126,60 @@ angular.module('starter.controllers', [])
             }
         });
     };
+    $scope.savepic = function () {
+        var pics1 = getPicArr(1);
+        var pics2 = getPicArr(2);
+        var poststr = ApiEndpoint.url + '/zaSys/editBeiAnAttach/';
+
+        poststr += '?checkId=' + $stateParams.checkId + '&checkType=' + $scope.checkdetail.CheckType.typeid + '&checkTime=' + $scope.checkdetail.CheckTime + '&checkUser=' + $scope.checkdetail.CheckUser + '&pics=' + escape(pics) + "&ItemDes=" + $scope.checkdetail.ItemDes;
+        poststr += "&SubProID=" + ($scope.checkdetail.SubPro ? $scope.checkdetail.SubPro.ProID : 0);
+        poststr += "&CheckNunber=" + ($scope.checkdetail.CheckNunber ? $scope.checkdetail.CheckNunber : "");
+        //poststr += "&Content2=" + ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : "");
+        //poststr += "&Content3=" + ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : "");
+        poststr += "&CheckResult5=" + ($scope.checkdetail.CheckResult5 ? $scope.checkdetail.CheckResult5 : "");
+
+        var checkresult = 0;
+        if ($scope.checkdetail.onjob1)
+            checkresult |= 1;
+        if ($scope.checkdetail.onjob2)
+            checkresult |= 2;
+        if ($scope.checkdetail.onjob3)
+            checkresult |= 4;
+        if ($scope.checkdetail.onjob4)
+            checkresult |= 8;
+        poststr += "&CheckResult=" + checkresult;
+        if ($scope.checkdetail.hasnotice) {
+            poststr += '&hasnotice=' + $scope.checkdetail.hasnotice;
+            poststr += '&NoticeType=' + $scope.checkdetail.NoticeType;
+            poststr += '&NoticeNo=' + $scope.checkdetail.NoticeNo;
+            poststr += '&StopPart=' + ($scope.checkdetail.StopPart ? $scope.checkdetail.StopPart : "");
+            poststr += '&GrantObject=' + (($scope.checkdetail.GrantObject1 ? 1 : 0) | ($scope.checkdetail.GrantObject2 ? 2 : 0) | ($scope.checkdetail.GrantObject3 ? 4 : 0));
+            //poststr += '&NoticeContent1=' + ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : "");
+            poststr += '&GrantDate=' + $scope.checkdetail.GrantDate;
+            poststr += '&MaxDoDate=' + $scope.checkdetail.MaxDoDate;
+        }
+        poststr += '&r=' + Math.random();
+        var f1value = $scope.checkdetail.F1 ? $scope.checkdetail.F1 : "";
+        var con1value = $scope.checkdetail.Content1 ? $scope.checkdetail.Content1 : "";
+        if ($scope.checkdetail.CheckMode == 24)
+            con1value = $scope.checkdetail.F2;
+        if ($scope.checkdetail.CheckMode > 23)
+            f1value = $scope.checkdetail.CheckResult2 ? $scope.checkdetail.CheckResult2 : "";
+
+        var postdata = { Content1: con1value, Content2: ($scope.checkdetail.Content2 ? $scope.checkdetail.Content2 : ""), Content3: ($scope.checkdetail.Content3 ? $scope.checkdetail.Content3 : ""), NoticeContent1: ($scope.checkdetail.NoticeContent1 ? $scope.checkdetail.NoticeContent1 : ""), "F1": f1value };
+        //alert(poststr); return;
+        $http.post(poststr, postdata).success(function (data) {
+            if (data.success) {
+                $ionicLoading.show({
+                    template: '修改成功！', duration: 1000
+                });
+            } else {
+                //alert('登录超时，请重新登录');
+                //$scope.login();
+                return;
+            }
+        })
+    }
     $scope.showPic = function (url) {
         $window.open(url, '_blank', "width=100%,height=100%,resizable=1", '')
     };

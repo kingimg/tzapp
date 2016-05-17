@@ -33,6 +33,8 @@
                 <div class="imgitem" ng-repeat="photo in photos2"><img ng-click="showPic('{{checkdetail.WebApiUrl}}{{photo.PicPath}}')" ng-src="{{photo.PicPath_s}}" /></div>
                 <div class="imgitem imgitem-border"><i class="ion-ios-camera plussize" ng-click="showActionsheet2()"></i></div>
             </div>  
+            <br />
+            <button class="button button-positive button-block" ng-click="savepic()">保存</button> 
         </div>
     </ion-content>
 </ion-view>
