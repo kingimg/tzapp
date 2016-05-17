@@ -32,8 +32,8 @@
   <gap:plugin name="cordova-plugin-media" source="npm" />
   <gap:plugin name="cordova-plugin-network-information" source="npm" />
   <gap:plugin name="cordova-plugin-vibration" source="npm" />
-  <gap:plugin name="phonegap-plugin-barcodescanner" source="npm" />
-  <gap:plugin name="cordova-plugin-x-socialsharing" source="npm" />
+  <!--<gap:plugin name="phonegap-plugin-barcodescanner" source="npm" />
+  <gap:plugin name="cordova-plugin-x-socialsharing" source="npm" />-->
   <platform name="android">
     <icon src="icon.png" />
     <icon src="www/res/icons/android/icon-36-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
