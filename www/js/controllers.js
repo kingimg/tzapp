@@ -105,9 +105,11 @@ angular.module('starter.controllers', [])
     $scope.multitest = function ()
     {
         window.imagePicker.getPictures(
-            function (results) {
+            function (results,results2) {
                 for (var i = 0; i < results.length; i++) {
-                    console.log('Image URI: ' + results[i]);
+                    //console.log('Image URI: ' + results[i]);
+                    alert(results[i]);
+                    alert(results2[i]);
                 }
             }, function (error) {
                 console.log('Error: ' + error);
