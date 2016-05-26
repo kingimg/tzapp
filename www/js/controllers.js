@@ -102,7 +102,18 @@ angular.module('starter.controllers', [])
         $scope.loginpictype = 0;
         makePhoto();
     };
-
+    $scope.multitest = function ()
+    {
+        window.imagePicker.getPictures(
+            function (results) {
+                for (var i = 0; i < results.length; i++) {
+                    console.log('Image URI: ' + results[i]);
+                }
+            }, function (error) {
+                console.log('Error: ' + error);
+            }
+        );
+    }
     $scope.login3 = function (user) {
         $scope.loginpictype = 1;
         $ionicLoading.show({
