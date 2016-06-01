@@ -20,9 +20,9 @@ angular.module('starter.controllers', [])
          
 .constant('ApiEndpoint', {   
    //url: 'http://192.168.3.63:8085'    
-   //url: 'http://tzapp.safe110.net:8085' 
+   url: 'http://tzapp.safe110.net:8085' 
     //url: 'http://121.199.75.88:8085'
-      url:'http://www.safe110.net:8085'
+      //url:'http://www.safe110.net:8085'
 })
 
 
@@ -108,7 +108,7 @@ angular.module('starter.controllers', [])
             function (results) {
                 for (var i = 0; i < results.length; i++) {
                     //console.log('Image URI: ' + results[i]);
-                    alert(results[i])
+                    alert(results[i]);
                 }
             }, function (error) {
                 console.log('Error: ' + error);
