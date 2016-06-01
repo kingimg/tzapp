@@ -7,7 +7,7 @@
   <preference name="permissions" value="none" />
   <preference name="orientation" value="default" />
   <preference name="target-device" value="universal" />
-  <preference name="fullscreen" value="false" />
+  <preference name="fullscreen" value="true" />
   <preference name="webviewbounce" value="false" />
   <preference name="prerendered-icon" value="true" />
   <preference name="stay-in-webview" value="true" />
@@ -32,7 +32,7 @@
   <gap:plugin name="cordova-plugin-media" source="npm" />
   <gap:plugin name="cordova-plugin-network-information" source="npm" />
   <gap:plugin name="cordova-plugin-vibration" source="npm" />
-  <plugin name="com.synconset.imagepicker" spec="1.0.4" source="pgb" />
+  <!--<plugin name="com.synconset.imagepicker" spec="1.0.4" source="pgb" />-->
   <!--<gap:plugin name="phonegap-plugin-barcodescanner" source="npm" />
   <gap:plugin name="cordova-plugin-x-socialsharing" source="npm" />-->
   <platform name="android">
